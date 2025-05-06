@@ -1,0 +1,24 @@
+{
+    "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"],
+        "moduleDirectory": ["node_modules", "./"]
+      },
+      "alias": {
+        "map": [
+          ["@/", "./"],
+          ["@/components", "./components"],
+          ["@/lib", "./lib"],
+          ["@/middlewares", "./middlewares"],
+          ["@/models", "./models"],
+          ["@/repositories", "./repositories"],
+          ["@/routes", "./routes"],
+          ["@/services", "./services"],
+          ["@/utils", "./utils"]
+        ],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+    }
+}
