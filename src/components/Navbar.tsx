@@ -6,7 +6,7 @@ function Navbar() {
         { name: "About", href: "#" },
         { name: "Features", href: "#" },
         { name: "How it Works", href: "#" },
-        { name: "FAQ", href: "#" },
+        { name: "FAQ", href: "#faq" },
       ];
   return (
     <header className="w-full bg-[#6366F1] text-white">
