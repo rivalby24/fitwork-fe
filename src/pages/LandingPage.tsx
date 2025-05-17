@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { ArrowRight, BarChart3, LineChart, MessageSquare } from "lucide-react";
@@ -6,7 +8,20 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 function LandingPage() {
-  // Feature cards data
+  const location = useLocation();
+
+  // Scroll ke elemen yang ditentukan jika ada state scrollTo
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      const el = document.querySelector(location.state.scrollTo);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth" });
+        }, 100); // delay agar DOM siap
+      }
+    }
+  }, [location]);
+
   const featureCards = [
     {
       icon: <BarChart3 className="h-6 w-6 text-white" />,
@@ -27,7 +42,6 @@ function LandingPage() {
     },
   ];
 
-  // Steps data
   const steps = [
     {
       number: 1,
@@ -49,10 +63,11 @@ function LandingPage() {
     },
   ];
 
-
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Navbar />
+
+      {/* Hero Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 grid md:grid-cols-2 gap-8 items-center">
           <div className="space-y-6">
@@ -108,7 +123,7 @@ function LandingPage() {
       </section>
 
       {/* How it Works Section */}
-      <section className="py-16 bg-gray-50">
+      <section id="how" className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">
             How FitWork Works
@@ -130,7 +145,9 @@ function LandingPage() {
                       <span className="text-[#6366F1]">{step.number}</span>
                     </div>
                     <h3 className="font-semibold mb-2">{step.title}</h3>
-                    <p className="text-blue-100 text-sm">{step.description}</p>
+                    <p className="text-blue-100 text-sm">
+                      {step.description}
+                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -138,10 +155,15 @@ function LandingPage() {
           </div>
         </div>
       </section>
-      <FAQ />
+
+      {/* FAQ Section - pastikan ID ada di sini */}
+      <section id="faq">
+        <FAQ />
+      </section>
+
       <Footer />
     </div>
   );
 }
 
-export default LandingPage
+export default LandingPage;

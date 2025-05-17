@@ -1,134 +1,124 @@
-import React, { useState } from 'react';
-import Footer from '@/components/Footer';
-function LoginPage() {
-  const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [fullName, setFullName] = useState('');
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useState, FormEvent } from "react";
+import { securedApi } from "@/api";
+import { useNavigate, Link } from "react-router-dom";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/constants";
+import React from "react";
+import LogoImage from "@/assets/fwok.svg";
+import Logo from "@/assets/login.svg";
 
-  const toggleAuthMode = () => {
-    setIsLogin(!isLogin);
+const LoginForm: React.FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const res = await securedApi.post("http://127.0.0.1:8000/api/v1/login/", {
+        email,
+        password,
+      });
+
+      localStorage.setItem(ACCESS_TOKEN, res.data.access);
+      localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+      navigate("/u/dashboard");
+    } catch (error) {
+      alert("Login failed. Please check your credentials.");
+      console.error(error);
+    }
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-        <div className="w-full max-w-md bg-white rounded-xl shadow-md">
-          {isLogin ? (
-            <div className="p-8">
-              <h2 className="text-2xl font-bold mb-6 text-center">Login to FitWork</h2>
-              <div className="mb-4">
-                <label htmlFor="email" className="sr-only">Email address</label>
-                <input
-                  type="email"
+    <div className="min-h-screen flex">
+      {/* Left: Form Area */}
+      <div className="flex-1 flex flex-col bg-white px-6 sm:px-12">
+        {/* Logo + Brand Name Top Left */}
+        <div className="flex justify-start pt-6">
+          <Link to="/" className="flex items-center gap-2">
+            <img
+              src={LogoImage}
+              alt="Brand Logo"
+              className="w-8 h-8 object-contain"
+            />
+            <span className="text-xl font-semibold text-indigo-600">FitWork</span>
+          </Link>
+        </div>
+
+        {/* Form Centered */}
+        <div className="flex-grow flex items-center justify-center">
+          <div className="w-full max-w-md">
+            <h1 className="text-3xl font-semibold text-gray-900 mb-6">
+              Login to your account
+            </h1>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <Label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email address
+                </Label>
+                <Input
                   id="email"
-                  placeholder="Email address"
+                  type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-12"
                 />
               </div>
-              <div className="mb-4">
-                <label htmlFor="password" className="sr-only">Password</label>
-                <input
-                  type="password"
+
+              <div>
+                <Label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Password
+                </Label>
+                <Input
                   id="password"
-                  placeholder="Password"
+                  type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-12"
                 />
               </div>
-              <button
-                className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition duration-300"
+
+              <Button
+                type="submit"
+                className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-base font-semibold"
+                disabled={!email || !password}
               >
                 Login
-              </button>
-              <div className="text-center mt-4">
-                <a href="#" className="text-sm text-gray-600 hover:underline">Forgot password?</a>
-              </div>
-              <div className="text-center mt-4">
-                <span className="text-sm text-gray-600">
-                  Don't have an account?
-                  <button
-                    onClick={toggleAuthMode}
-                    className="ml-1 text-blue-600 hover:underline"
-                  >
-                    Sign up
-                  </button>
-                </span>
-              </div>
-            </div>
-          ) : (
-            <div className="p-8">
-              <h2 className="text-2xl font-bold mb-6 text-center">Create Your FitWork Account</h2>
-              <div className="mb-4">
-                <label htmlFor="fullName" className="sr-only">Full Name</label>
-                <input
-                  type="text"
-                  id="fullName"
-                  placeholder="Full Name"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div className="mb-4">
-                <label htmlFor="signupEmail" className="sr-only">Email address</label>
-                <input
-                  type="email"
-                  id="signupEmail"
-                  placeholder="Email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div className="mb-4">
-                <label htmlFor="signupPassword" className="sr-only">Password</label>
-                <input
-                  type="password"
-                  id="signupPassword"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div className="mb-4">
-                <label htmlFor="confirmPassword" className="sr-only">Confirm Password</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  placeholder="Confirm Password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <button
-                className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition duration-300"
-              >
-                Register
-              </button>
-              <div className="text-center mt-4">
-                <span className="text-sm text-gray-600">
-                  Already have an account?
-                  <button
-                    onClick={toggleAuthMode}
-                    className="ml-1 text-blue-600 hover:underline"
-                  >
-                    Login
-                  </button>
-                </span>
-              </div>
-            </div>
-          )}
+              </Button>
+
+              <p className="text-sm text-center text-gray-600">
+                Don't have an account?{" "}
+                <Link to="/register" className="text-indigo-600 hover:underline">
+                  Register here
+                </Link>
+              </p>
+            </form>
+          </div>
         </div>
+      </div>
+
+      {/* Right: Fullscreen Image */}
+      <div className="hidden md:flex flex-1 h-screen">
+        <img
+          src={Logo}
+          alt="Brand Visual"
+          className="w-full h-full object-cover"
+        />
       </div>
     </div>
   );
-}
+};
 
-export default LoginPage;
+export default LoginForm;
