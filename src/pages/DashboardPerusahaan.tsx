@@ -6,7 +6,7 @@ import StatCard from "@/components/ui/StatCard";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, MoreHorizontal, CheckSquare } from "lucide-react";
 
-export default function DashboardPerusahaan() {
+function DashboardPerusahaan() {
   const navigate = useNavigate();
 
   const candidateData = [
@@ -84,3 +84,5 @@ export default function DashboardPerusahaan() {
     </div>
   );
 }
+
+export default DashboardPerusahaan

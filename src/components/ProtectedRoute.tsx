@@ -7,6 +7,7 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 interface ProtectedRouteProps {
   children: ReactNode;
   requireCompanyAdmin?: boolean;
+  requireCandidate?: boolean;
 }
 
 interface CustomJwtPayload {
@@ -18,6 +19,7 @@ interface CustomJwtPayload {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   requireCompanyAdmin = false,
+  requireCandidate = false,
 }) => {
   const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
   const [redirectPath, setRedirectPath] = useState<string | null>(null);
@@ -33,7 +35,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     try {
       const decoded = jwtDecode<CustomJwtPayload>(token);
       const now = Date.now() / 1000;
-      console.log(decoded.is_candidate);
 
       if (decoded.exp < now) {
         const refreshToken = localStorage.getItem(REFRESH_TOKEN);
@@ -57,16 +58,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
           setIsAuthorized(false);
         }
       } else {
-        // Redirect jika admin
-        if (decoded.is_company_admin) {
-          setRedirectPath("/c/dashboard");
+        // Cegah kandidat akses dashboard admin
+        if (requireCompanyAdmin && !decoded.is_company_admin) {
+          setRedirectPath("/u/dashboard");
           setIsAuthorized(false);
           return;
         }
 
-        // Redirect jika butuh company admin tapi bukan
-        if (requireCompanyAdmin && !decoded.is_company_admin) {
-          setRedirectPath("/u/dashboard");
+        // Cegah admin akses dashboard kandidat
+        if (requireCandidate && !decoded.is_candidate) {
+          setRedirectPath("/c/dashboard");
           setIsAuthorized(false);
           return;
         }
@@ -80,7 +81,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   };
 
   auth();
-}, [requireCompanyAdmin]);
+}, [requireCompanyAdmin, requireCandidate]);
 
 
   if (isAuthorized === null) {
@@ -92,7 +93,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   return isAuthorized ? <>{children}</> : <Navigate to="/login" replace />;
-  
+
 };
 
 export default ProtectedRoute;

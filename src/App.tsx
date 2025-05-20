@@ -28,15 +28,15 @@ function App() {
           }
         />
 
-        {/* Protected route for normal user */}
         <Route
           path="/u/dashboard"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requireCandidate={true}>
               <DashboardUser />
             </ProtectedRoute>
           }
         />
+
 
         {/* Protected AI chat route accessible only for logged-in users */}
         <Route
