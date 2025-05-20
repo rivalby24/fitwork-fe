@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { LogOut, UserIcon } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/constants";
@@ -37,7 +37,7 @@ export default function NavbarUser() {
   ];
 
   return (
-    <header className="w-full h-16 bg-indigo-500 border-b border-neutral-200">
+    <header className="sticky top-0 z-50 w-full h-[65px] bg-indigo-500 border-b border-neutral-200">
       <div className="container mx-auto h-full px-4 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center">

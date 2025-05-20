@@ -6,25 +6,47 @@ import RegisterForm from "./pages/RegisterForm";
 import About from "./pages/About";
 import DashboardPerusahaan from "./pages/DashboardPerusahaan";
 import DashboardUser from "./pages/DashboardUser";
-import AssesmentCompany from "./pages/AssesmentCompany";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ChatBot from "./pages/ChatBot";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginForm/>} />
+        <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/about" element={<About />} />
-        <Route path="/c" element={<DashboardPerusahaan />} />
-        <Route 
-          path="/u/dashboard" 
+
+        {/* Protected route for company admin */}
+        <Route
+          path="/c/dashboard"
           element={
-          <ProtectedRoute>
-            <DashboardUser/>
-          </ProtectedRoute>} />
-        <Route path="/ya" element={<AssesmentCompany />} />
+            <ProtectedRoute requireCompanyAdmin={true}>
+              <DashboardPerusahaan />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Protected route for normal user */}
+        <Route
+          path="/u/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardUser />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Protected AI chat route accessible only for logged-in users */}
+        <Route
+          path="/ai-chat"
+          element={
+            <ProtectedRoute>
+              <ChatBot />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

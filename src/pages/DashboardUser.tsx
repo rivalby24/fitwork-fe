@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { securedApi } from "@/api";
+import ChatBotBox from "../components/ChatBotBox";
 
 function DashboardUser() {
     const [username, setUsername] = useState<string>("");
@@ -55,13 +56,6 @@ function DashboardUser() {
     }, []);
 
     const assessmentCards = [
-        {
-            id: "personal",
-            title: "Personal Assessment",
-            description: "Complete your personality and skills evaluation",
-            icon: <ClipboardList className="w-7 h-9" />,
-            buttonText: "Start Assessment",
-        },
         {
             id: "company",
             title: "Company Culture Fit",
@@ -134,79 +128,7 @@ function DashboardUser() {
                 </div>
 
                 {/* AI Consultation */}
-                <div className="bg-neutral-100 py-16">
-                    <Card className="max-w-7xl mx-auto shadow-sm">
-                        <CardContent className="p-6">
-                            <h2 className="text-xl font-medium mb-6">AI Career Consultation</h2>
-                            <div className="flex flex-col md:flex-row gap-6">
-                                {/* Chat Panel */}
-                                <div className="bg-neutral-100 rounded-lg p-4 flex-1">
-                                    <div className="mb-4 space-y-4">
-                                        {chatMessages.map((message, index) => (
-                                            <div key={index} className="flex items-start">
-                                                {message.isUser ? (
-                                                    <>
-                                                        <Avatar className="h-8 w-8 mr-3">
-                                                            <AvatarFallback>{message.avatar}</AvatarFallback>
-                                                        </Avatar>
-                                                        <div className="bg-gray-200 rounded-lg p-3 max-w-[333px]">
-                                                            <p className="text-base">{message.message}</p>
-                                                        </div>
-                                                    </>
-                                                ) : (
-                                                    <div className="flex ml-auto items-start">
-                                                        <div className="bg-indigo-500 rounded-lg p-3 max-w-[498px] text-white">
-                                                            <p className="text-base">{message.message}</p>
-                                                        </div>
-                                                        <Avatar className="h-8 w-8 ml-3 bg-gray-200">
-                                                            <AvatarFallback>
-                                                                <Bot className="h-4 w-4" />
-                                                            </AvatarFallback>
-                                                        </Avatar>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className="flex mt-4">
-                                        <Input
-                                            className="flex-grow mr-2 h-[42px]"
-                                            placeholder="Type your question..."
-                                            aria-label="Chat input"
-                                            value={newMessage}
-                                            onChange={(e) => setNewMessage(e.target.value)}
-                                            onKeyDown={(e) => {
-                                                if (e.key === "Enter") handleSend();
-                                            }}
-                                        />
-                                        <Button
-                                            className="h-[42px] w-12 bg-indigo-500 hover:bg-indigo-600 p-0"
-                                            title="Send"
-                                            onClick={handleSend}
-                                        >
-                                            <Send className="h-4 w-4" />
-                                        </Button>
-                                    </div>
-                                </div>
-
-                                {/* Suggested Topics */}
-                                <div className="bg-neutral-100 rounded-lg p-4 w-full md:w-[400px]">
-                                    <h3 className="text-base font-normal mb-4">Suggested Topics</h3>
-                                    <div className="space-y-3">
-                                        {suggestedTopics.map((topic) => (
-                                            <Button
-                                                key={topic}
-                                                className="w-full h-10 bg-indigo-500 hover:bg-indigo-600 justify-start px-2"
-                                            >
-                                                {topic}
-                                            </Button>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
+                <ChatBotBox/>
 
                 {/* Comparison Panel */}
                 <div className="py-12">

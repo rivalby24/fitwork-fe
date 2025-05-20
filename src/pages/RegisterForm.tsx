@@ -5,7 +5,7 @@ import { useState, FormEvent } from "react";
 import { plainApi } from "@/api";
 import { useNavigate, Link } from "react-router-dom";
 import React from "react";
-import LogoImage from "@/assets/office.svg";
+import Gif from "@/assets/REGISTER.gif";
 import Logo from "@/assets/fwok.svg";
 
 const RegisterForm: React.FC = () => {
@@ -34,14 +34,13 @@ const RegisterForm: React.FC = () => {
   return (
     <div className="min-h-screen flex">
       {/* Left: Fullscreen Image */}
-      <div className="hidden md:flex flex-1 h-screen">
+      <div className="bg-indigo-300 hidden md:flex flex-1 h-screen items-center justify-center">
         <img
-          src={LogoImage}
+          src={Gif}
           alt="Brand Visual"
-          className="w-full h-full object-cover"
+          className="w-[600px] h-[600px] object-contain"
         />
       </div>
-
       {/* Right: Form Area */}
       <div className="flex-1 flex flex-col bg-white px-6 sm:px-12">
         {/* Logo + Brand Name Top Right */}
@@ -78,6 +77,7 @@ const RegisterForm: React.FC = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-12"
+                  placeholder="Enter your email here"
                 />
               </div>
 
@@ -94,6 +94,7 @@ const RegisterForm: React.FC = () => {
                   onChange={(e) => setUsername(e.target.value)}
                   required
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-12"
+                  placeholder="Enter your username here"
                 />
               </div>
 
@@ -111,6 +112,7 @@ const RegisterForm: React.FC = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-12"
+                  placeholder="Enter your password here"
                 />
               </div>
 

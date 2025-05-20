@@ -1,71 +1,98 @@
+import React, { ReactNode, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { jwtDecode, JwtPayload } from "jwt-decode";
-import { securedApi } from "../api";
-import { REFRESH_TOKEN, ACCESS_TOKEN } from "../constants";
-import { useState, useEffect, ReactNode } from "react";
+import { jwtDecode } from "jwt-decode";
+import { securedApi } from "../api"; // pastikan path benar
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 
 interface ProtectedRouteProps {
-    children: ReactNode;
+  children: ReactNode;
+  requireCompanyAdmin?: boolean;
 }
 
-interface CustomJwtPayload extends JwtPayload {
-    exp: number;
+interface CustomJwtPayload {
+  exp: number;
+  is_company_admin?: boolean;
+  is_candidate?: boolean;
 }
 
-function ProtectedRoute({ children }: ProtectedRouteProps) {
-    const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  requireCompanyAdmin = false,
+}) => {
+  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
+  const [redirectPath, setRedirectPath] = useState<string | null>(null);
 
-    useEffect(() => {
-        auth().catch(() => setIsAuthorized(false));
-    }, []);
-
-    const refreshToken = async () => {
-        const refreshToken = localStorage.getItem(REFRESH_TOKEN);
-        try {
-            const res = await securedApi.post("/api/v1/refresh/", {
-                refresh: refreshToken,
-            });
-
-            if (res.status === 200) {
-                localStorage.setItem(ACCESS_TOKEN, res.data.access);
-                setIsAuthorized(true);
-            } else {
-                setIsAuthorized(false);
-            }
-        } catch (error) {
-            console.error(error);
-            setIsAuthorized(false);
-        }
-    };
-
-    const auth = async () => {
-        const token = localStorage.getItem(ACCESS_TOKEN);
-        if (!token) {
-            setIsAuthorized(false);
-            return;
-        }
-
-        try {
-            const decoded = jwtDecode<CustomJwtPayload>(token);
-            const tokenExpiration = decoded.exp;
-            const now = Date.now() / 1000;
-
-            if (tokenExpiration < now) {
-                await refreshToken();
-            } else {
-                setIsAuthorized(true);
-            }
-        } catch (e) {
-            console.error("Failed to decode token", e);
-            setIsAuthorized(false);
-        }
-    };
-
-    if (isAuthorized === null) {
-        return <div>Loading...</div>;
+  useEffect(() => {
+  const auth = async () => {
+    const token = localStorage.getItem(ACCESS_TOKEN);
+    if (!token) {
+      setIsAuthorized(false);
+      return;
     }
 
-    return isAuthorized ? <>{children}</> : <Navigate to="/login" />;
-}
+    try {
+      const decoded = jwtDecode<CustomJwtPayload>(token);
+      const now = Date.now() / 1000;
+      console.log(decoded.is_candidate);
+
+      if (decoded.exp < now) {
+        const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+        if (!refreshToken) {
+          setIsAuthorized(false);
+          return;
+        }
+
+        try {
+          const res = await securedApi.post("/api/v1/refresh/", {
+            refresh: refreshToken,
+          });
+
+          if (res.status === 200) {
+            localStorage.setItem(ACCESS_TOKEN, res.data.access);
+            setIsAuthorized(true);
+          } else {
+            setIsAuthorized(false);
+          }
+        } catch {
+          setIsAuthorized(false);
+        }
+      } else {
+        // Redirect jika admin
+        if (decoded.is_company_admin) {
+          setRedirectPath("/c/dashboard");
+          setIsAuthorized(false);
+          return;
+        }
+
+        // Redirect jika butuh company admin tapi bukan
+        if (requireCompanyAdmin && !decoded.is_company_admin) {
+          setRedirectPath("/u/dashboard");
+          setIsAuthorized(false);
+          return;
+        }
+
+        setIsAuthorized(true);
+      }
+    } catch (e) {
+      console.error("Failed to decode token", e);
+      setIsAuthorized(false);
+    }
+  };
+
+  auth();
+}, [requireCompanyAdmin]);
+
+
+  if (isAuthorized === null) {
+    return <div>Loading...</div>;
+  }
+
+  if (redirectPath) {
+    return <Navigate to={redirectPath} replace />;
+  }
+
+  return isAuthorized ? <>{children}</> : <Navigate to="/login" replace />;
+  
+};
 
 export default ProtectedRoute;
