@@ -1,10 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import NavbarDashboardPerusahaan from "@/components/NavbarDashboardPerusahaan";
 import FooterDashboardPerusahaanDanUser from "@/components/FooterDashboardPerusahaanDanUser";
 import StatCard from "@/components/ui/StatCard";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, MoreHorizontal, CheckSquare } from "lucide-react";
+import Navbar from "@/components/Navbar";
 
 function DashboardPerusahaan() {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ function DashboardPerusahaan() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      <NavbarDashboardPerusahaan />
+      <Navbar/>
       <div className="w-full max-w-[1440px] mx-auto p-6 md:p-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           <StatCard title="Generated Assessment" icon={<ChevronDown className="h-4 w-3" />}>

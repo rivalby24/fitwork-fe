@@ -51,10 +51,6 @@ function ChatBotBox() {
   const [suggestions, setSuggestions] = useState<string[]>(DEFAULT_SUGGESTIONS);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chatMessages]);
-
   const handleSend = async (topic: string) => {
     if (!topic.trim() || isLoading) return;
 
@@ -107,7 +103,6 @@ function ChatBotBox() {
   };
 
   return (
-    <div className="bg-neutral-100 py-16">
       <Card className="max-w-7xl mx-auto shadow-sm">
         <CardContent className="p-6">
           <h2 className="text-xl font-medium mb-6">AI Career Consultation</h2>
@@ -130,7 +125,6 @@ function ChatBotBox() {
           </div>
         </CardContent>
       </Card>
-    </div>
   );
 }
 

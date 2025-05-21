@@ -66,7 +66,6 @@ function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Navbar />
-
       {/* Hero Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 grid md:grid-cols-2 gap-8 items-center">

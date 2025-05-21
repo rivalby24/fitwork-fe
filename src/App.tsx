@@ -17,7 +17,6 @@ function App() {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/about" element={<About />} />
-
         {/* Protected route for company admin */}
         <Route
           path="/c/dashboard"
@@ -27,7 +26,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+        {/* Rute untuk kandidat biasa */}
         <Route
           path="/u/dashboard"
           element={
@@ -36,8 +35,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-
         {/* Protected AI chat route accessible only for logged-in users */}
         <Route
           path="/ai-chat"

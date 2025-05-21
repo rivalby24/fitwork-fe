@@ -1,8 +1,8 @@
-import React, { ReactNode, useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
-import { securedApi } from "../api"; // pastikan path benar
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+import React, { ReactNode, useEffect } from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuthStore } from "../components/useAuthStore";
+import { Loader } from "lucide-react";
+import { toast } from "sonner";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -10,90 +10,49 @@ interface ProtectedRouteProps {
   requireCandidate?: boolean;
 }
 
-interface CustomJwtPayload {
-  exp: number;
-  is_company_admin?: boolean;
-  is_candidate?: boolean;
-}
-
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   requireCompanyAdmin = false,
   requireCandidate = false,
 }) => {
-  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
-  const [redirectPath, setRedirectPath] = useState<string | null>(null);
+  const { isAuthorized, userRole, checkAuth } = useAuthStore();
+  const location = useLocation();
 
   useEffect(() => {
-  const auth = async () => {
-    const token = localStorage.getItem(ACCESS_TOKEN);
-    if (!token) {
-      setIsAuthorized(false);
-      return;
-    }
-
-    try {
-      const decoded = jwtDecode<CustomJwtPayload>(token);
-      const now = Date.now() / 1000;
-
-      if (decoded.exp < now) {
-        const refreshToken = localStorage.getItem(REFRESH_TOKEN);
-        if (!refreshToken) {
-          setIsAuthorized(false);
-          return;
-        }
-
-        try {
-          const res = await securedApi.post("/api/v1/refresh/", {
-            refresh: refreshToken,
-          });
-
-          if (res.status === 200) {
-            localStorage.setItem(ACCESS_TOKEN, res.data.access);
-            setIsAuthorized(true);
-          } else {
-            setIsAuthorized(false);
-          }
-        } catch {
-          setIsAuthorized(false);
-        }
-      } else {
-        // Cegah kandidat akses dashboard admin
-        if (requireCompanyAdmin && !decoded.is_company_admin) {
-          setRedirectPath("/u/dashboard");
-          setIsAuthorized(false);
-          return;
-        }
-
-        // Cegah admin akses dashboard kandidat
-        if (requireCandidate && !decoded.is_candidate) {
-          setRedirectPath("/c/dashboard");
-          setIsAuthorized(false);
-          return;
-        }
-
-        setIsAuthorized(true);
-      }
-    } catch (e) {
-      console.error("Failed to decode token", e);
-      setIsAuthorized(false);
-    }
-  };
-
-  auth();
-}, [requireCompanyAdmin, requireCandidate]);
-
+    checkAuth();
+  }, [checkAuth]);
 
   if (isAuthorized === null) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader className="h-6 w-6 animate-spin text-indigo-600" />
+        <span className="ml-2 text-gray-700">Memeriksa akses...</span>
+      </div>
+    );
   }
 
-  if (redirectPath) {
-    return <Navigate to={redirectPath} replace />;
+  if (!isAuthorized) {
+    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
 
-  return isAuthorized ? <>{children}</> : <Navigate to="/login" replace />;
+  // 🔁 Kembalikan user ke dashboard sesuai perannya
+  const getDashboardPath = () => {
+    if (userRole === "candidate") return "/u/dashboard";
+    if (userRole === "company_admin") return "/c/dashboard";
+    return "/";
+  };
 
+  if (requireCandidate && userRole !== "candidate") {
+    toast.error("Akses ditolak: Halaman ini hanya untuk kandidat.");
+    return <Navigate to={getDashboardPath()} replace />;
+  }
+
+  if (requireCompanyAdmin && userRole !== "company_admin") {
+    toast.error("Akses ditolak: Halaman ini hanya untuk admin perusahaan.");
+    return <Navigate to={getDashboardPath()} replace />;
+  }
+
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;
