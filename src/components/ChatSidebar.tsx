@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { securedApi } from "@/api";
+import { securedApi } from "@/lib/api";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 

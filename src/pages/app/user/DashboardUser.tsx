@@ -1,22 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import {
   Building2,
 } from "lucide-react";
-
-import FooterDashboard from "@/components/FooterDashboard";
-import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { securedApi } from "@/api";
-import ChatBotBox from "../components/ChatBotBox";
+import { securedApi } from "@/lib/api";
+import ChatBotBox from "@/components/ChatBotBox";
 
 function DashboardUser() {
   const [username, setUsername] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -45,8 +39,7 @@ function DashboardUser() {
   ];
 
   return (
-    <div className="w-full bg-neutral-50 min-h-screen">
-      <Navbar />
+    <>
       <main className="pt-20 px-4 max-w-7xl mx-auto">
         {/* Welcome message */}
         <div className="text-center mb-10">
@@ -103,9 +96,7 @@ function DashboardUser() {
           </Card>
         </div>
       </main>
-
-      <FooterDashboard />
-    </div>
+    </>
   );
 }
 

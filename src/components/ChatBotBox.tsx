@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import ChatBubble from "@/components/ChatBubble";
 import { Button } from "@/components/ui/button";
-import { securedApi } from "@/api"; // axios instance dengan auth headers
+import { securedApi } from "@/lib/api"; // axios instance dengan auth headers
 
 interface ChatMessage {
   message: string;

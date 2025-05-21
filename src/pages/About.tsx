@@ -1,11 +1,10 @@
-import React from 'react'
-import Navbar from "@/components/Navbar";
+import NavbarLanding from "@/components/NavbarLanding";
 import Footer from '@/components/Footer';
 
 function About() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      <Navbar />
+      <NavbarLanding />
       About
       <Footer />
     </div>

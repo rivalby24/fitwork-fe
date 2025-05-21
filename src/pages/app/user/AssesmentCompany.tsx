@@ -1,10 +1,7 @@
-import FooterDashboard from "@/components/FooterDashboard";
-import NavbarUser from "@/components/NavbarUser";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Building, Search } from "lucide-react";
-import React from "react";
 
 const companies = [
   {
@@ -24,11 +21,9 @@ const companies = [
   },
 ];
 
-export default function AssesmentCompany() {
+function AssesmentCompany() {
   return (
-    
-    <div className="flex flex-col items-start">
-        <NavbarUser/>
+    <>
       {/* Header Section */}
       <header className="w-full bg-neutral-50">
         <div className="max-w-[1280px] mx-auto px-20 pt-14 pb-14">
@@ -100,8 +95,9 @@ export default function AssesmentCompany() {
             </div>
           </div>
         </div>
-        <FooterDashboard />
       </main>
-    </div>
+    </>
   );
 }
+
+export default AssesmentCompany;

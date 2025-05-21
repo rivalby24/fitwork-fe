@@ -4,8 +4,8 @@ import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { ArrowRight, BarChart3, LineChart, MessageSquare } from "lucide-react";
 import FAQ from "@/components/FAQ";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import NavbarLanding from "@/components/NavbarLanding";
 
 function LandingPage() {
   const location = useLocation();
@@ -65,7 +65,7 @@ function LandingPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      <Navbar />
+      <NavbarLanding />
       {/* Hero Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 grid md:grid-cols-2 gap-8 items-center">

@@ -1,8 +1,8 @@
 // stores/useAuthStore.ts
 import { create } from "zustand";
 import { jwtDecode } from "jwt-decode";
-import { securedApi } from "../api";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+import { securedApi } from "../lib/api";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../lib/constants";
 
 interface CustomJwtPayload {
   exp: number;

@@ -4,8 +4,8 @@ import { jwtDecode } from "jwt-decode";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { securedApi } from "@/api";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/constants";
+import { securedApi } from "@/lib/api";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/lib/constants";
 import Logo from "@/assets/fwok.svg";
 import Gif from "@/assets/LOGIN.gif";
 
@@ -13,7 +13,7 @@ interface DecodedToken {
   is_company_admin?: boolean;
   is_candidate?: boolean;
   is_fitwork_admin?: boolean;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const LoginForm: React.FC = () => {
@@ -26,9 +26,9 @@ const LoginForm: React.FC = () => {
     if (token) {
       const decoded: DecodedToken = jwtDecode(token);
       if (decoded.is_company_admin) {
-        navigate("/c/dashboard", { replace: true });
+        navigate("/app/c/dashboard", { replace: true });
       } else {
-        navigate("/u/dashboard", { replace: true });
+        navigate("/app/u/dashboard", { replace: true });
       }
     }
   }, [navigate]);
@@ -50,9 +50,9 @@ const LoginForm: React.FC = () => {
       const decoded: DecodedToken = jwtDecode(access);
 
       if (decoded.is_company_admin) {
-        navigate("/c/dashboard");
+        navigate("/app/c/dashboard");
       } else {
-        navigate("/u/dashboard");
+        navigate("/app/u/dashboard");
       }
     } catch (error) {
       alert("Login failed. Please check your credentials.");

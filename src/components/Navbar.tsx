@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { securedApi } from "@/api";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/constants";
+import { securedApi } from "@/lib/api";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/lib/constants";
 import { LogOut, UserIcon } from "lucide-react";
 import { Button } from "../components/ui/button";
 import {

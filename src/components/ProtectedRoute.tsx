@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { useAuthStore } from "../components/useAuthStore";
+import { useAuthStore } from "../stores/useAuthStore";
 import { Loader } from "lucide-react";
 import { toast } from "sonner";
 
@@ -37,8 +37,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   // 🔁 Kembalikan user ke dashboard sesuai perannya
   const getDashboardPath = () => {
-    if (userRole === "candidate") return "/u/dashboard";
-    if (userRole === "company_admin") return "/c/dashboard";
+    if (userRole === "candidate") return "/app/u/dashboard";
+    if (userRole === "company_admin") return "/app/c/dashboard";
     return "/";
   };
 
