@@ -1,5 +1,5 @@
 import NavbarLanding from "@/components/NavbarLanding";
-import Footer from "@/components/Footer";
+import Footer from "@/components/FooterLanding";
 import Image from "@/assets/Ambiya.jpg"; 
 
 function About() {

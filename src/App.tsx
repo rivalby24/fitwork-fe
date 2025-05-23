@@ -8,6 +8,7 @@ import DashboardPerusahaan from "./pages/app/company/DashboardPerusahaan";
 import DashboardUser from "./pages/app/user/DashboardUser";
 import ChatBot from "./pages/app/user/ChatBot";
 import Layout from "./pages/app/Layout";
+import AssesmentCompany from "./pages/app/user/AssesmentCompany";
 
 function App() {
   return (
@@ -34,6 +35,14 @@ function App() {
             element={
               <ProtectedRoute requireCandidate={true}>
                 <DashboardUser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="u/assessment"
+            element={
+              <ProtectedRoute requireCandidate={true}>
+                <AssesmentCompany />
               </ProtectedRoute>
             }
           />

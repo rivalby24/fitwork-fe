@@ -4,7 +4,7 @@ import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { ArrowRight, BarChart3, LineChart, MessageSquare } from "lucide-react";
 import FAQ from "@/components/FAQ";
-import Footer from "@/components/Footer";
+import Footer from "@/components/FooterLanding";
 import NavbarLanding from "@/components/NavbarLanding";
 
 function LandingPage() {
