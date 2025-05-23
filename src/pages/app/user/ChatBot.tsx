@@ -16,42 +16,44 @@ function ChatBot() {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [selectedHistoryId, setSelectedHistoryId] = useState<string | null>(
-    null
-  );
+  const [selectedHistoryId, setSelectedHistoryId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMessages]);
 
   useEffect(() => {
-    const loadInitial = async () => {
+    const loadChatHistory = async () => {
       if (!selectedHistoryId) {
         setChatMessages([
           {
             message: "Hi, how can I help you with your career?",
             isUser: false,
+            avatar: "AI",
           },
         ]);
         return;
       }
 
       try {
-        const res = await securedApi.get(
-          `/api/v1/ai/history/${selectedHistoryId}`
-        );
-        const historyMessages: ChatMessage[] = res.data.messages;
-        setChatMessages(historyMessages);
+        const res = await securedApi.get(`/api/v1/ai/history/${selectedHistoryId}`);
+        const formattedMessages = res.data.map((msg: any) => ({
+          message: msg.content,
+          isUser: msg.role === "user",
+          avatar: msg.role === "user" ? "U" : "AI",
+        }));
+        setChatMessages(formattedMessages);
       } catch (error) {
-        console.error("Failed to load history detail:", error);
+        console.error("Failed to load chat history:", error);
         setChatMessages([
-          { message: "Failed to load chat history.", isUser: false },
+          { message: "Failed to load chat history.", isUser: false, avatar: "AI" },
         ]);
       }
     };
 
-    loadInitial();
+    loadChatHistory();
   }, [selectedHistoryId]);
 
   const handleSend = async (message: string) => {
@@ -66,33 +68,58 @@ function ChatBot() {
     setChatMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
 
+    // Show typing animation
     setChatMessages((prev) => [
-      ...prev,
-      { message: "Bot is typing...", isUser: false, isTyping: true },
+      ...prev.filter((m) => !m.isTyping),
+      {
+        message: "Typing...",
+        isUser: false,
+        isTyping: true,
+        avatar: "AI",
+      },
     ]);
 
     try {
       const res = await securedApi.post("/api/v1/ai/consult/", {
         question: message,
-        history_id: selectedHistoryId, // optional: track conversation
+        history_id: selectedHistoryId,
       });
 
-      const aiResponse: ChatMessage = {
-        message: res.data.response,
-        isUser: false,
-        avatar: "AI",
-      };
+      const botResponse = res.data.response;
+
+      // Optional: Simulate typing like ChatGPT
+      const typingSpeed = 20; // milliseconds per character
+      let displayed = "";
+      for (let i = 0; i <= botResponse.length; i++) {
+        displayed = botResponse.slice(0, i);
+        await new Promise((resolve) => setTimeout(resolve, typingSpeed));
+        setChatMessages((prev) => [
+          ...prev.filter((m) => !m.isTyping),
+          {
+            message: displayed,
+            isUser: false,
+            isTyping: true,
+            avatar: "AI",
+          },
+        ]);
+      }
 
       setChatMessages((prev) => [
         ...prev.filter((m) => !m.isTyping),
-        aiResponse,
+        {
+          message: botResponse,
+          isUser: false,
+          avatar: "AI",
+        },
       ]);
-    } catch {
+    } catch (error) {
+      console.error("Error sending message:", error);
       setChatMessages((prev) => [
         ...prev.filter((m) => !m.isTyping),
         {
           message: "Sorry, there was an error. Please try again.",
           isUser: false,
+          avatar: "AI",
         },
       ]);
     } finally {
@@ -101,45 +128,51 @@ function ChatBot() {
   };
 
   return (
-    <main className="px-20 py-20 mx-auto">
-      <div className="flex flex-1">
+    <main className="px-6 py-10 mx-auto max-w-full">
+      <div className="flex flex-col lg:flex-row gap-6">
         <ChatSidebar
-          onSelectHistory={(id) => setSelectedHistoryId(id)}
+          onSelectHistory={(id) => {
+            setSelectedHistoryId(id);
+          }}
           selectedId={selectedHistoryId || undefined}
         />
-        <div className="flex-1 flex items-center justify-center p-4">
-          <Card className="w-full max-w-7xl shadow-sm">
-            <CardContent className="p-6 w-full">
-              <h2 className="text-xl font-medium mb-6">
-                AI Career Consultation
-              </h2>
-              <div className="flex flex-col gap-6">
-                <div className="bg-neutral-100 rounded-lg p-4 flex-1">
-                  <div className="mb-4 space-y-4 max-h-[400px] overflow-y-auto">
-                    {chatMessages.map((msg, index) => (
-                      <ChatBubble
-                        key={index}
-                        message={msg.message}
-                        isUser={msg.isUser}
-                        avatar={msg.avatar}
-                        isTyping={msg.isTyping}
-                      />
-                    ))}
-                    <div ref={messagesEndRef} />
-                  </div>
-                  <ChatInput
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onSend={() => {
-                      handleSend(inputValue);
-                      setInputValue("");
-                    }}
-                    disabled={isLoading}
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="flex-1 flex flex-col h-[731px] bg-white">
+          <div className="flex items-center justify-between px-6 py-4 ">
+            <h2 className="text-lg font-semibold">AI Career Consultant</h2>
+          </div>
+
+          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+            {chatMessages.map((msg, index) => (
+              <ChatBubble
+                key={index}
+                message={msg.message}
+                isUser={msg.isUser}
+                avatar={msg.avatar}
+                isTyping={msg.isTyping}
+              />
+            ))}
+            <div ref={messagesEndRef} />
+          </div>
+
+          <div className="px-6 py-4 bg-white">
+            <ChatInput
+              ref={inputRef}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onSend={() => {
+                handleSend(inputValue);
+                setInputValue("");
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend(inputValue);
+                  setInputValue("");
+                }
+              }}
+              disabled={isLoading}
+            />
+          </div>
         </div>
       </div>
     </main>

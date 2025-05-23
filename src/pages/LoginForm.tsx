@@ -8,6 +8,7 @@ import { securedApi } from "@/lib/api";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/lib/constants";
 import Logo from "@/assets/fwok.svg";
 import Gif from "@/assets/LOGIN.gif";
+import { toast } from "sonner"; // ✅ Import toast
 
 interface DecodedToken {
   is_company_admin?: boolean;
@@ -49,13 +50,15 @@ const LoginForm: React.FC = () => {
 
       const decoded: DecodedToken = jwtDecode(access);
 
+      toast.success("Login successful"); // ✅ Success notification
+
       if (decoded.is_company_admin) {
         navigate("/app/c/dashboard");
       } else {
         navigate("/app/u/dashboard");
       }
     } catch (error) {
-      alert("Login failed. Please check your credentials.");
+      toast.error("Login failed. Please check your credentials."); // ✅ Error toast
       console.error("Login error:", error);
     }
   };
@@ -64,7 +67,6 @@ const LoginForm: React.FC = () => {
     <div className="min-h-screen flex">
       {/* Left: Form Area */}
       <div className="flex-1 flex flex-col bg-white px-6 sm:px-12">
-        {/* Logo + Brand Name */}
         <div className="flex justify-start pt-6">
           <Link to="/" className="flex items-center gap-2">
             <img src={Logo} alt="Brand Logo" className="w-8 h-8 object-contain" />
@@ -72,7 +74,6 @@ const LoginForm: React.FC = () => {
           </Link>
         </div>
 
-        {/* Form Section */}
         <div className="flex-grow flex items-center justify-center">
           <div className="w-full max-w-md">
             <h1 className="text-3xl font-semibold text-gray-900 mb-6">

@@ -20,12 +20,13 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectHistory, selectedId }
     useEffect(() => {
         const fetchHistory = async () => {
             try {
-                const res = await securedApi.get("/api/v1/ai/history/");
+                const res = await securedApi.get("/api/v1/ai/sessions/");
                 setHistory(res.data);
             } catch (error) {
                 console.error("Failed to fetch chat history:", error);
             }
         };
+
         fetchHistory();
     }, []);
 
@@ -36,8 +37,10 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectHistory, selectedId }
                 {history.map((item) => (
                     <Button
                         key={item.id}
-                        variant={item.id === selectedId ? "default" : "ghost"}
-                        className="w-full justify-start mb-2"
+                        variant="ghost"
+                        className={`w-full justify-start mb-2 text-indigo-700 bg-gray-200 hover:bg-gray-300 ${
+                            item.id === selectedId ? "font-semibold" : ""
+                        }`}
                         onClick={() => onSelectHistory(item.id)}
                     >
                         {item.title || "Untitled"}
