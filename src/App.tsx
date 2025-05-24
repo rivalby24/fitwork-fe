@@ -10,6 +10,7 @@ import ChatBot from "./pages/app/user/ChatBot";
 import Layout from "./pages/app/Layout";
 import AssesmentCompany from "./pages/app/user/Assessment";
 import AssesmentQuestion from "./pages/app/user/AssessmentQuestion";
+import Compare from "./pages/app/user/Compare";
 
 function App() {
   return (
@@ -60,6 +61,14 @@ function App() {
             element={
               <ProtectedRoute requireCandidate={true}>
                 <ChatBot />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="u/compare"
+            element={
+              <ProtectedRoute requireCandidate={true}>
+                <Compare />
               </ProtectedRoute>
             }
           />

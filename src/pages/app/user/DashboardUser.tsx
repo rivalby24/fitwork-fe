@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { securedApi } from "@/lib/api";
 import ChatBotBox from "@/components/ChatBotBox";
+import CompanyA from "@/assets/company-a.jpg";
+import CompanyB from "@/assets/company-b.jpg";
+import { Link } from "react-router-dom";
 
 function DashboardUser() {
   const [username, setUsername] = useState<string>("");
@@ -80,19 +83,40 @@ function DashboardUser() {
         {/* Comparison Panel */}
         <div className="py-12 max-w-7xl mx-auto px-4">
           <h2 className="text-2xl font-normal mb-4">Assessment Comparison</h2>
-          <Card className="shadow-sm">
-            <CardContent className="flex rounded-lg overflow-hidden">
-              <div className="bg-gray-200 flex flex-col items-center justify-center w-1/2 py-10 space-y-4">
-                <Building2 className="w-6 h-6 text-gray-700" />
-                <p className="text-center text-base font-medium px-6">
-                  Compare your assessment with other company
-                </p>
-                <Button className="h-9 w-32 bg-neutral-700 hover:bg-neutral-800 text-white text-sm">
-                  Compare
-                </Button>
+          <Card className="shadow-sm relative">
+            <CardContent className="flex rounded-lg overflow-hidden relative">
+              {/* Left Box */}
+              <div
+                className="flex flex-col items-center justify-center w-1/2 py-32 space-y-4 bg-cover bg-white bg-center"
+                style={{
+                  backgroundImage: `url('${CompanyB}')`,
+                  opacity: '90%'
+                }}
+              >
+                <Building2 className="w-6 h-6 text-black drop-shadow-lg" />
               </div>
-              <div className="bg-white flex items-center justify-center w-1/2 py-10">
-                <Building2 className="w-6 h-6 text-indigo-500" />
+
+              {/* Right Box */}
+              <div
+                className="flex flex-col items-center justify-center w-1/2 py-32 space-y-4 bg-cover bg-center"
+                style={{
+                  backgroundImage: `url('${CompanyA}')`,
+                  opacity: '90%'
+                }}
+              >
+                <Building2 className="w-6 h-6 text-white drop-shadow-lg" />
+              </div>
+
+              {/* Center Text */}
+              <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 px-4 py-1 font-medium">
+                <div className="flex flex-col justify-center items-center mt-2 gap-12">
+                  <h2 className="text-2xl font-bold">Compare your assessment with other company</h2>
+                  <Link to="/app/u/compare">
+                    <Button className="h-9 w-40 bg-indigo-700 hover:bg-indigo-800 text-white text-sm cursor-pointer">
+                      Start Comparing
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </CardContent>
           </Card>
