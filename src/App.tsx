@@ -8,7 +8,7 @@ import DashboardPerusahaan from "./pages/app/company/DashboardPerusahaan";
 import DashboardUser from "./pages/app/user/DashboardUser";
 import ChatBot from "./pages/app/user/ChatBot";
 import Layout from "./pages/app/Layout";
-import AssesmentCompany from "./pages/app/user/AssesmentCompany";
+import AssesmentCompany from "./pages/app/user/Assessment";
 
 function App() {
   return (
