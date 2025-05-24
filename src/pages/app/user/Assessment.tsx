@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Building, Search } from "lucide-react";
+import { Building } from "lucide-react";
 import { securedApi } from "@/lib/api";
 
 interface Company {
@@ -63,7 +63,7 @@ function AssesmentCompany() {
     <>
       {/* Header */}
       <header className="w-full bg-neutral-50">
-        <div className="max-w-[1280px] mx-auto px-26 pt-14 pb-14">
+        <div className="max-w-[720px] mx-auto px-26 pt-14 pb-14">
           <div className="flex flex-col justify-center">
             <h1 className="text-3xl font-normal text-black leading-[30px] text-center">
               Find the Right Company For You
@@ -78,21 +78,6 @@ function AssesmentCompany() {
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
-
-              <Button
-                onClick={fetchCompanies}
-                className="h-[50px] w-[141px] bg-indigo-500 hover:bg-indigo-600 rounded-lg flex items-center justify-center gap-2"
-                disabled={loading}
-              >
-                {loading ? (
-                  <span>Loading...</span>
-                ) : (
-                  <>
-                    <Search className="w-4 h-4" />
-                    <span>Search</span>
-                  </>
-                )}
-              </Button>
             </div>
 
             {error && (

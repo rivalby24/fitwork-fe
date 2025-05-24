@@ -132,10 +132,6 @@ function ChatBot() {
           selectedId={selectedHistoryId || undefined}
         />
         <div className="flex-1 flex flex-col h-[731px] bg-white">
-          <div className="flex items-center justify-between px-6 py-4 ">
-            <h2 className="text-lg font-semibold">AI Career Consultant</h2>
-          </div>
-
           <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
             {chatMessages.map((msg, index) => (
               <ChatBubble
