@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom"
 function Layout() {
   return (
     <>
-        <div className="w-full bg-neutral-50 min-h-screen">
+        <div className="w-full bg-neutral-50 min-h-screen flex flex-col">
             <NavbarDashboard />
             <Outlet />
             <FooterDashboard />

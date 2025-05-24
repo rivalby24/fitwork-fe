@@ -40,9 +40,9 @@ function DashboardUser() {
 
   return (
     <>
-      <main className="pt-20 px-4 max-w-7xl mx-auto">
+      <main className="pt-20 px-6 w-full">
         {/* Welcome message */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-10 max-w-7xl mx-auto">
           {loading ? (
             <h1 className="text-3xl font-bold">Loading...</h1>
           ) : error ? (
@@ -53,7 +53,7 @@ function DashboardUser() {
         </div>
 
         {/* Assessment cards */}
-        <div className="flex flex-wrap justify-center gap-6 mb-16">
+        <div className="flex flex-wrap justify-center gap-6 mb-16 max-w-7xl mx-auto">
           {assessmentCards.map((card) => (
             <Card key={card.id} className="w-[400px] shadow-sm">
               <CardContent className="p-6">
@@ -73,10 +73,12 @@ function DashboardUser() {
         </div>
 
         {/* Chatbot */}
-        <ChatBotBox />
+        <div className="max-w-7xl mx-auto px-4">
+          <ChatBotBox />
+        </div>
 
         {/* Comparison Panel */}
-        <div className="py-12">
+        <div className="py-12 max-w-7xl mx-auto px-4">
           <h2 className="text-2xl font-normal mb-4">Assessment Comparison</h2>
           <Card className="shadow-sm">
             <CardContent className="flex rounded-lg overflow-hidden">

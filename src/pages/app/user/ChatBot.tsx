@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import ChatBubble from "@/components/ChatBubble";
 import ChatInput from "@/components/ChatInput";
 import { securedApi } from "@/lib/api";
@@ -19,10 +18,6 @@ function ChatBot() {
   const [selectedHistoryId, setSelectedHistoryId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chatMessages]);
 
   useEffect(() => {
     const loadChatHistory = async () => {
@@ -128,7 +123,7 @@ function ChatBot() {
   };
 
   return (
-    <main className="px-6 py-10 mx-auto max-w-full">
+    <main className="px-6 py-10 ">
       <div className="flex flex-col lg:flex-row gap-6">
         <ChatSidebar
           onSelectHistory={(id) => {
