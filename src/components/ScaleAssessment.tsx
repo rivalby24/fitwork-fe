@@ -9,6 +9,7 @@ interface QuestionItem {
 }
 
 interface ScaleAssessmentProps {
+  companyName: string;
   questions: QuestionItem[];
   ratingOptions: string[]; // e.g., ["1", "2", "3", "4", "5"]
   onSubmit: (answers: { questionId: string; score: number }[]) => void;
@@ -45,7 +46,7 @@ export default function ScaleAssessment({
 
     const answers = questions.map((q, index) => ({
       questionId: q.id,
-      score: selectedRatings[index] + 1, // index 0–4 → score 1–5
+      score: selectedRatings[index] + 1,
     }));
 
     onSubmit(answers);
@@ -55,7 +56,6 @@ export default function ScaleAssessment({
     <div className="bg-neutral-100 rounded-lg p-4">
       {questions.map((question, qIndex) => (
         <div key={question.id} className="mb-12">
-          {/* Question box */}
           <div className="bg-neutral-200 rounded-lg p-3 mx-auto max-w-[615px]">
             <div className="flex items-center">
               <div className="w-[142px]" />
@@ -63,7 +63,6 @@ export default function ScaleAssessment({
             </div>
           </div>
 
-          {/* Rating options */}
           <div className="flex justify-center mt-4 gap-6">
             {ratingOptions.map((_, rIndex) => (
               <div key={rIndex} className="flex flex-col items-center gap-1">
@@ -84,7 +83,6 @@ export default function ScaleAssessment({
         </div>
       ))}
 
-      {/* Submit Button */}
       <div className="flex justify-center mt-8">
         <Button
           className="bg-neutral-600 hover:bg-neutral-700 text-white rounded-lg w-[615px] h-[42px]"

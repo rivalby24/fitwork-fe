@@ -49,7 +49,7 @@ function App() {
             }
           />
           <Route
-            path="u/assessment/question"
+            path="u/assessment/question/:companyId"
             element={
               <ProtectedRoute requireCandidate={true}>
                 <AssesmentQuestion />

@@ -119,7 +119,7 @@ function AssesmentCompany() {
                       </div>
 
                       <div className="flex justify-center mt-[26px]">
-                        <Link to="/app/u/assessment/question">
+                        <Link to={`/app/u/assessment/question/${company.id}/`}>
                           <Button className="w-[170px] h-10 bg-indigo-500 hover:bg-indigo-600 rounded-lg text-[15px]">
                             Start Assessment
                           </Button>
