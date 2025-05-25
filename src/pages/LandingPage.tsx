@@ -99,7 +99,7 @@ function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16">
+      <section className="py-16" id="feature">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-6">
             {featureCards.map((feature, index) => (

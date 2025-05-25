@@ -113,7 +113,7 @@ const LoginForm: React.FC = () => {
 
               <Button
                 type="submit"
-                className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-base font-semibold"
+                className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-base font-semibold cursor-pointer"
                 disabled={!email || !password}
               >
                 Login
@@ -132,7 +132,7 @@ const LoginForm: React.FC = () => {
 
       {/* Right: Image Area */}
       <div className="bg-indigo-300 hidden md:flex flex-1 h-screen items-center justify-center">
-        <img src={Gif} alt="Brand Visual" className="w-[500px] h-[500px] object-contain" />
+        <img src={Gif} alt="Brand Visual" className="w-[500px] h-[500px] object-contain" fetchPriority="high"/>
       </div>
     </div>
   );

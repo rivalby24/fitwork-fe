@@ -1,11 +1,24 @@
+import { useNavigate } from "react-router-dom";
+
 function Footer() {
+  const navigate = useNavigate();
+
   return (
     <footer className="bg-[#6366F1] text-white py-12">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-8">
-          <div>
-            <h3 className="font-bold mb-4">FitWork</h3>
-            <p className="text-sm text-blue-200">
+          <div className="flex flex-col gap-6">
+            <button
+              onClick={() => {
+                if (location.pathname !== "/") navigate("/");
+                else window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <img className="h-8" alt="Logo" src="/src/assets/fwok2.svg" />
+              <p className="text-xl font-bold">FitWork</p>
+            </button>
+            <p className="text-md text-blue-200">
               Career assessment platform powered by AI
             </p>
           </div>

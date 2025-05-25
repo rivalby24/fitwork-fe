@@ -3,6 +3,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../stores/useAuthStore";
 import { Loader } from "lucide-react";
 import { toast } from "sonner";
+import { getDashboardPath } from "@/lib/utils";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -35,21 +36,14 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
 
-  // 🔁 Kembalikan user ke dashboard sesuai perannya
-  const getDashboardPath = () => {
-    if (userRole === "candidate") return "/app/u/dashboard";
-    if (userRole === "company_admin") return "/app/c/dashboard";
-    return "/";
-  };
-
   if (requireCandidate && userRole !== "candidate") {
     toast.error("Akses ditolak: Halaman ini hanya untuk kandidat.");
-    return <Navigate to={getDashboardPath()} replace />;
+    return <Navigate to={getDashboardPath(userRole)} replace />;
   }
 
   if (requireCompanyAdmin && userRole !== "company_admin") {
     toast.error("Akses ditolak: Halaman ini hanya untuk admin perusahaan.");
-    return <Navigate to={getDashboardPath()} replace />;
+    return <Navigate to={getDashboardPath(userRole)} replace />;
   }
 
   return <>{children}</>;

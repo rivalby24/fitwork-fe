@@ -11,7 +11,8 @@ const LandingNavbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const navLinkClass = "font-normal text-white text-base px-2 py-1 rounded hover:bg-indigo-600";
+  const navLinkClass =
+    "font-normal text-white text-base px-2 py-1 rounded hover:bg-indigo-600 cursor-pointer";
 
   const handleAnchorClick = (hash: string) => {
     if (location.pathname !== "/") {
@@ -32,14 +33,14 @@ const LandingNavbar = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full h-[65px] bg-indigo-500 border-b border-indigo-200">
+    <header className="sticky top-0 z-50 w-full h-[65px] bg-indigo-500 border-b border-indigo-500">
       <div className="h-full mx-auto px-4 lg:px-10 flex items-center justify-between">
         <button
           onClick={() => {
             if (location.pathname !== "/") navigate("/");
             else window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          className="flex items-center"
+          className="flex items-center cursor-pointer"
         >
           <img className="h-8" alt="Logo" src="/src/assets/fwok2.svg" />
         </button>
@@ -68,23 +69,23 @@ const LandingNavbar = () => {
         </NavigationMenu>
 
         <div className="flex items-center space-x-3 text-white">
-              <Link to="/login">
-                <Button
-                  variant="ghost"
-                  className="h-10 text-white hover:text-white hover:bg-indigo-600"
-                >
-                  Login
-                </Button>
-              </Link>
-              <Link to="/register">
-                <Button
-                  variant="secondary"
-                  className="h-10 bg-gray-200 text-black hover:bg-gray-300"
-                >
-                  Register
-                </Button>
-              </Link>
-            </div>
+          <Link to="/login">
+            <Button
+              variant="ghost"
+              className="h-10 text-white hover:text-white hover:bg-indigo-600 cursor-pointer"
+            >
+              Login
+            </Button>
+          </Link>
+          <Link to="/register">
+            <Button
+              variant="secondary"
+              className="h-10 bg-gray-200 text-black hover:bg-gray-300 cursor-pointer"
+            >
+              Register
+            </Button>
+          </Link>
+        </div>
       </div>
     </header>
   );

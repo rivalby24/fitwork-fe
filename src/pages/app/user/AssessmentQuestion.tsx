@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import React, { useEffect, useState } from "react";
 import ScaleAssessment from "@/components/ScaleAssessment";
 import { securedApi } from "@/lib/api";
 import { useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 interface QuestionItem {
   id: string;
@@ -70,11 +70,11 @@ export default function Body() {
       };
 
       await securedApi.post("/api/v1/assessments/submit/", payload);
-      alert("Assessment submitted successfully!");
+      toast.success("Assessment submitted successfully!");
       await fetchResults(); // fetch result after successful submit
     } catch (error) {
       console.error("Submission error:", error);
-      alert("Submission failed.");
+      toast.error("Submission failed.");
     }
   };
 
@@ -82,7 +82,7 @@ export default function Body() {
     <div className="relative h-full bg-neutral-50">
       <div className="container mx-auto px-5 py-12">
         <h1 className="text-2xl font-normal leading-6">
-          Company Culture Fit Assessment
+          {companyName} Culture Fit Assessment
         </h1>
       </div>
 
@@ -90,8 +90,6 @@ export default function Body() {
         <div className="container mx-auto px-5">
           <Card className="rounded-lg shadow-sm">
             <CardContent className="p-6">
-              <h2 className="text-2xl font-normal leading-6 mb-16">{companyName}</h2>
-
               {loading ? (
                 <p className="text-center">Loading questions...</p>
               ) : results ? (

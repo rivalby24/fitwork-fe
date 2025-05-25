@@ -11,15 +11,19 @@ import Layout from "./pages/app/Layout";
 import AssesmentCompany from "./pages/app/user/Assessment";
 import AssesmentQuestion from "./pages/app/user/AssessmentQuestion";
 import Compare from "./pages/app/user/Compare";
+import { Toaster } from "./components/ui/sonner";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
     <BrowserRouter>
+      <Toaster />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/about" element={<About />} />
+        <Route path="*" element={<NotFound />}/>
         <Route path="app" element={<Layout />}>
           {/* Protected route for company admin */}
           <Route

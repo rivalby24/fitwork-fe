@@ -1,55 +1,79 @@
 import React, { useState, useEffect } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Loader } from "lucide-react";
 import { securedApi } from "@/lib/api";
+import { Loader } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
-interface Company {
+interface Session {
   id: string;
-  name: string;
-  logo?: string;
+  company: string;
+  company_name: string; // alias for display
+  created_at: string;
+  overall_score: number;
 }
 
-function Compare() {
-  const [companies, setCompanies] = useState<Company[]>([]);
+interface CompareResultSide {
+  session_id: string;
+  company: string;
+  created_at: string;
+  overall_score: number;
+  dimension_scores: Record<string, number>;
+}
+
+interface CompareResult {
+  session1: CompareResultSide;
+  session2: CompareResultSide;
+}
+
+export default function Compare() {
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [firstSessionId, setFirstSessionId] = useState<string>("");
+  const [secondSessionId, setSecondSessionId] = useState<string>("");
+  const [compareResult, setCompareResult] = useState<CompareResult | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [leftId, setLeftId] = useState<string>("");
-  const [rightId, setRightId] = useState<string>("");
-  const [searchParams] = useSearchParams();
-
+  // 1) Load user’s sessions
   useEffect(() => {
-    const fetchCompanies = async () => {
+    const fetchSessions = async () => {
       setError(null);
       setLoading(true);
       try {
-        const response = await securedApi.get("api/v1/companies/", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        const data = response.data;
-        const list = Array.isArray(data)
-          ? data
-          : Array.isArray(data.results)
-          ? data.results
-          : [];
-        setCompanies(list);
+        const resp = await securedApi.get<Session[]>("/api/v1/assessments/sessions/");
+        const data = resp.data;
+        setSessions(data);
 
-        const leftParam = searchParams.get("left");
-        const rightParam = searchParams.get("right");
-        setLeftId(leftParam || (list[0]?.id ?? ""));
-        setRightId(rightParam || (list[1]?.id ?? list[0]?.id ?? ""));
+        if (data.length >= 2) {
+          setFirstSessionId(data[0].id);
+          setSecondSessionId(data[1].id);
+        }
       } catch {
-        setError("Failed to load companies.");
+        setError("Failed to load your assessment sessions.");
       } finally {
         setLoading(false);
       }
     };
-    fetchCompanies();
-  }, [searchParams]);
+    fetchSessions();
+  }, []);
+
+  // 2) Fetch comparison whenever session IDs change
+  useEffect(() => {
+    const fetchComparison = async () => {
+      if (!firstSessionId || !secondSessionId) return;
+      setError(null);
+      setLoading(true);
+      try {
+        const res = await securedApi.get<CompareResult>("/api/v1/assessments/compare/", {
+          params: { s1: firstSessionId, s2: secondSessionId },
+        });
+        setCompareResult(res.data);
+      } catch {
+        setError("Failed to compare these assessments.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchComparison();
+  }, [firstSessionId, secondSessionId]);
 
   if (loading) {
     return (
@@ -58,40 +82,44 @@ function Compare() {
       </div>
     );
   }
-  if (error)
-    return <div className="text-red-500 text-center py-4">{error}</div>;
-  if (companies.length === 0)
-    return (
-      <div className="text-center py-4">No companies available to compare.</div>
-    );
 
-  const leftCompany = companies.find((c) => c.id === leftId) || companies[0];
-  const rightCompany =
-    companies.find((c) => c.id === rightId) || companies[1] || companies[0];
+  if (error) {
+    return <div className="text-red-500 text-center py-4">{error}</div>;
+  }
+
+  if (sessions.length < 2) {
+    return (
+      <div className="text-center py-4">
+        You need at least two completed assessments to compare.
+      </div>
+    );
+  }
 
   return (
     <main className="px-4 py-8">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <h2 className="text-3xl mb-8">Assessment Comparison</h2>
 
-        <div className="flex flex-col md:flex-row gap-6 mb-10">
-          {["First Company", "Second Company"].map((label, idx) => (
+        {/* Session selectors */}
+        <div className="flex flex-col md:flex-row gap-6 mb-8">
+          {["First Assessment", "Second Assessment"].map((label, idx) => (
             <div key={label} className="flex-1">
-              <label className="block mb-2 font-medium text-gray-700">
+              <label className="block mb-2 font-medium">
                 {label}
               </label>
               <select
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                value={idx === 0 ? leftId : rightId}
+                className="w-full border rounded px-4 py-2"
+                value={idx === 0 ? firstSessionId : secondSessionId}
                 onChange={(e) =>
                   idx === 0
-                    ? setLeftId(e.target.value)
-                    : setRightId(e.target.value)
+                    ? setFirstSessionId(e.target.value)
+                    : setSecondSessionId(e.target.value)
                 }
               >
-                {companies.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
+                {sessions.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.company_name} —{" "}
+                    {new Date(s.created_at).toLocaleDateString()}
                   </option>
                 ))}
               </select>
@@ -99,61 +127,42 @@ function Compare() {
           ))}
         </div>
 
-        <Card className="shadow-md overflow-hidden relative bg-indigo-200">
-          <CardContent className="flex flex-col md:flex-row rounded-lg p-0">
-            {/* Left Box */}
-            <div className="relative w-full md:w-1/2 h-60 md:h-auto bg-cover bg-center flex items-center justify-center">
-              {/* Dark overlay for contrast */}
-              <div className="absolute inset-0 bg-opacity-60"></div>
-              {/* Icon */}
-              <div className="relative z-10 p-3 rounded-full">
-                <img
-                  src={leftCompany.logo}
-                  alt={leftCompany.name}
-                  className="object-cover w-full h-full"
-                />
-              </div>
-              {/* Label */}
-              <span className="absolute bottom-4 left-4 text-black font-semibold bg-white bg-opacity-90 px-3 py-1 rounded">
-                {leftCompany.name}
-              </span>
-            </div>
-
-            {/* Right Box */}
-            <div className="relative w-full md:w-1/2 h-60 md:h-auto bg-cover bg-center flex items-center justify-center">
-              {/* Dark overlay for contrast */}
-              <div className="absolute inset-0 bg-opacity-60"></div>
-              {/* Icon */}
-              <div className="relative z-10 p-3 rounded-full">
-                <img
-                  src={rightCompany.logo}
-                  alt={rightCompany.name}
-                  className="object-cover w-full h-full"
-                />
-              </div>
-              {/* Label */}
-              <span className="absolute bottom-4 right-4 text-black font-semibold bg-white bg-opacity-90 px-3 py-1 rounded">
-                {rightCompany.name}
-              </span>
-            </div>
-
-            {/* Center Overlay */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="text-center space-y-1">
-                <Link
-                  to={`/app/u/compare?left=${leftCompany.id}&right=${rightCompany.id}`}
-                >
-                  <Button className="h-9 w-44 bg-indigo-600 hover:bg-indigo-700 text-white text-sm">
-                    Start Comparing
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Comparison cards */}
+        {compareResult && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {(["session1", "session2"] as const).map((key) => {
+              const side = compareResult[key];
+              return (
+                <Card key={side.session_id} className="shadow">
+                  <CardContent>
+                    <h3 className="text-xl font-semibold">{side.company}</h3>
+                    <p className="text-sm text-gray-600 mb-2">
+                      Taken on{" "}
+                      {new Date(side.created_at).toLocaleString()}
+                    </p>
+                    <p className="mb-4">
+                      <strong>Overall Score:</strong> {side.overall_score}
+                    </p>
+                    <div className="space-y-2">
+                      {Object.entries(side.dimension_scores).map(
+                        ([dim, score]) => (
+                          <div
+                            key={dim}
+                            className="flex justify-between border-b pb-1"
+                          >
+                            <span>{dim}</span>
+                            <span>{score}</span>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        )}
       </div>
     </main>
   );
 }
-
-export default Compare;

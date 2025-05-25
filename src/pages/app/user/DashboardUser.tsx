@@ -1,35 +1,19 @@
-import { useEffect, useState } from "react";
-import {
-  Building2,
-} from "lucide-react";
+import { useEffect } from "react";
+import { Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { securedApi } from "@/lib/api";
 import ChatBotBox from "@/components/ChatBotBox";
-import CompanyA from "@/assets/company-a.jpg";
-import CompanyB from "@/assets/company-b.jpg";
+import CompanyA from "@/assets/company-a.webp";
+import CompanyB from "@/assets/company-b.webp";
 import { Link } from "react-router-dom";
+import { useUserStore } from "@/stores/useUserStore";
 
 function DashboardUser() {
-  const [username, setUsername] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const { username, loading, fetchUser, error } = useUserStore();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await securedApi.get("http://127.0.0.1:8000/api/v1/me/");
-        setUsername(res.data.username);
-      } catch (error) {
-        console.error("Failed to fetch user info", error);
-        setError("Failed to load user data.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchUser();
-  }, []);
+  }, [fetchUser]);
 
   const assessmentCards = [
     {
@@ -58,7 +42,7 @@ function DashboardUser() {
         {/* Assessment cards */}
         <div className="flex flex-wrap justify-center gap-6 mb-16 max-w-7xl mx-auto">
           {assessmentCards.map((card) => (
-            <Card key={card.id} className="w-[400px] shadow-sm">
+            <Card key={card.id} className="w-[800px] shadow-sm">
               <CardContent className="p-6">
                 <div className="bg-gray-200 h-40 rounded-lg flex items-center justify-center mb-6">
                   {card.icon}
@@ -67,9 +51,11 @@ function DashboardUser() {
                 <p className="text-base font-normal text-neutral-600 mb-6">
                   {card.description}
                 </p>
-                <Button className="w-full h-10 bg-neutral-600 hover:bg-neutral-700 rounded-lg">
-                  {card.buttonText}
-                </Button>
+                <Link to="/app/u/assessment">
+                  <Button className="w-full h-10 bg-neutral-600 hover:bg-neutral-700 rounded-lg cursor-pointer">
+                    {card.buttonText}
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           ))}
@@ -86,31 +72,37 @@ function DashboardUser() {
           <Card className="shadow-sm relative">
             <CardContent className="flex rounded-lg overflow-hidden relative">
               {/* Left Box */}
-              <div
-                className="flex flex-col items-center justify-center w-1/2 py-32 space-y-4 bg-cover bg-white bg-center"
-                style={{
-                  backgroundImage: `url('${CompanyB}')`,
-                  opacity: '90%'
-                }}
-              >
-                <Building2 className="w-6 h-6 text-black drop-shadow-lg" />
+              <div className="relative flex flex-col items-center justify-center w-1/2 py-32 space-y-4 overflow-hidden">
+                <img
+                  src={CompanyB}
+                  alt="Company B"
+                  className="absolute inset-0 w-full h-full object-cover"
+                  loading="lazy" // Load with priority
+                  fetchPriority="high" // Modern browsers use this for preload
+                />
+                <div className="absolute inset-0 bg-black opacity-60 w-full h-full"/>
+                <Building2 className="w-6 h-6 text-white drop-shadow-lg z-10" />
               </div>
 
               {/* Right Box */}
-              <div
-                className="flex flex-col items-center justify-center w-1/2 py-32 space-y-4 bg-cover bg-center"
-                style={{
-                  backgroundImage: `url('${CompanyA}')`,
-                  opacity: '90%'
-                }}
-              >
-                <Building2 className="w-6 h-6 text-white drop-shadow-lg" />
+              <div className="relative flex flex-col items-center justify-center w-1/2 py-32 space-y-4 overflow-hidden">
+                <img
+                  src={CompanyA}
+                  alt="Company A"
+                  className="absolute inset-0 w-full h-full object-cover"
+                  loading="lazy"
+                  fetchPriority="high"
+                />
+                <div className="absolute inset-0 bg-black opacity-60 w-full h-full" />
+                <Building2 className="w-6 h-6 text-white drop-shadow-lg z-10" />
               </div>
 
               {/* Center Text */}
-              <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 px-4 py-1 font-medium">
-                <div className="flex flex-col justify-center items-center mt-2 gap-12">
-                  <h2 className="text-2xl font-bold">Compare your assessment with other company</h2>
+              <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 px-4 py-1 font-medium z-20">
+                <div className="flex flex-col justify-center items-center mt-2 gap-12 text-white text-center">
+                  <h2 className="text-2xl font-bold">
+                    Compare your assessment with other company
+                  </h2>
                   <Link to="/app/u/compare">
                     <Button className="h-9 w-40 bg-indigo-700 hover:bg-indigo-800 text-white text-sm cursor-pointer">
                       Start Comparing

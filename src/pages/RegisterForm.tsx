@@ -7,6 +7,7 @@ import { useNavigate, Link } from "react-router-dom";
 import React from "react";
 import Gif from "@/assets/REGISTER.gif";
 import Logo from "@/assets/fwok.svg";
+import { toast } from "sonner";
 
 const RegisterForm: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -26,7 +27,7 @@ const RegisterForm: React.FC = () => {
 
       navigate("/login");
     } catch (error) {
-      alert("Registration failed. Please try again.");
+      toast.error("Registration failed. Please try again.");
       console.error(error);
     }
   };
@@ -50,6 +51,7 @@ const RegisterForm: React.FC = () => {
               src={Logo}
               alt="Brand Logo"
               className="w-8 h-8 object-contain"
+              fetchPriority="high"
             />
             <span className="text-xl font-semibold text-indigo-600">FitWork</span>
           </Link>
@@ -118,7 +120,7 @@ const RegisterForm: React.FC = () => {
 
               <Button
                 type="submit"
-                className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-base font-semibold"
+                className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-base font-semibold cursor-pointer"
                 disabled={!email || !username || !password}
               >
                 Register

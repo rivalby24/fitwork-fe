@@ -56,9 +56,8 @@ export default function ScaleAssessment({
     <div className="bg-neutral-100 rounded-lg p-4">
       {questions.map((question, qIndex) => (
         <div key={question.id} className="mb-12">
-          <div className="bg-neutral-200 rounded-lg p-3 mx-auto max-w-[615px]">
-            <div className="flex items-center">
-              <div className="w-[142px]" />
+          <div className="bg-neutral-200 rounded-lg p-5 mx-auto max-w-[615px]">
+            <div className="flex items-center justify-center">
               <p className="text-base font-normal">{question.statement}</p>
             </div>
           </div>

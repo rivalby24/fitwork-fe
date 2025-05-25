@@ -11,6 +11,11 @@ interface ChatMessage {
   isTyping?: boolean;
 }
 
+interface FormatMessage {
+  content: string;
+  role: string;
+}
+
 function ChatBot() {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +39,7 @@ function ChatBot() {
 
       try {
         const res = await securedApi.get(`/api/v1/ai/history/${selectedHistoryId}`);
-        const formattedMessages = res.data.map((msg: any) => ({
+        const formattedMessages = res.data.map((msg: FormatMessage) => ({
           message: msg.content,
           isUser: msg.role === "user",
           avatar: msg.role === "user" ? "U" : "AI",

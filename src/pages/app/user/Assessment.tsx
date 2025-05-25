@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Building } from "lucide-react";
+import { Building, Loader } from "lucide-react";
 import { securedApi } from "@/lib/api";
 
 interface Company {
@@ -37,8 +37,6 @@ function AssesmentCompany() {
         },
       });
 
-      console.log("Response data:", response.data);
-
       if (Array.isArray(response.data)) {
         setCompanies(response.data);
       } else if (Array.isArray(response.data.results)) {
@@ -47,7 +45,7 @@ function AssesmentCompany() {
         setCompanies([]);
         setError("Unexpected response format");
       }
-    } catch (err) {
+    } catch {
       setError("Failed to load companies.");
       setCompanies([]);
     } finally {
@@ -58,6 +56,14 @@ function AssesmentCompany() {
   const filteredCompanies = companies.filter((company) =>
     company.name.toLowerCase().includes(search.toLowerCase())
   );
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-full py-20">
+        <Loader className="h-8 w-8 animate-spin text-indigo-600" />
+      </div>
+    );
+  }
 
   return (
     <>
