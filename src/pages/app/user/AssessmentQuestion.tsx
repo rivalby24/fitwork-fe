@@ -1,9 +1,10 @@
 import { Card, CardContent } from "@/components/ui/card";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ScaleAssessment from "@/components/ScaleAssessment";
 import { securedApi } from "@/lib/api";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
+import { Loader } from "lucide-react";
 
 interface QuestionItem {
   id: string;
@@ -15,12 +16,14 @@ interface QuestionItem {
 interface AssessmentResultItem {
   overall_score: number;
   dimensions: { [key: string]: number };
+  evaluation: string;
 }
 
 export default function Body() {
   const { companyId } = useParams<{ companyId: string }>();
   const [questions, setQuestions] = useState<QuestionItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingQuestion, setLoadingQuestion] = useState(true);
+  const [loadingResult, setLoadingResult] = useState(true);
   const [companyName, setCompanyName] = useState("Company");
   const [results, setResults] = useState<AssessmentResultItem | null>(null);
   const ratingOptions = ["1", "2", "3", "4", "5"];
@@ -37,7 +40,7 @@ export default function Body() {
       } catch (error) {
         console.error("Failed to load questions:", error);
       } finally {
-        setLoading(false);
+        setLoadingQuestion(false);
       }
     }
 
@@ -50,10 +53,12 @@ export default function Body() {
       setResults({
         overall_score: res.data.overall_score,
         dimensions: res.data.dimensions,
+        evaluation: res.data.evaluation,
       });
     } catch (error) {
       console.error("Failed to fetch results:", error);
-      alert("Failed to load results.");
+    } finally {
+      setLoadingResult(false);
     }
   };
 
@@ -90,30 +95,43 @@ export default function Body() {
         <div className="container mx-auto px-5">
           <Card className="rounded-lg shadow-sm">
             <CardContent className="p-6">
-              {loading ? (
+              {loadingQuestion ? (
                 <p className="text-center">Loading questions...</p>
               ) : results ? (
                 <>
                   <h3 className="text-xl font-semibold mb-4">Assessment Results</h3>
-                  <div className="mb-4">
-                    <span className="font-semibold">Overall Score: </span>
-                    <span className="text-indigo-600 font-bold">
-                      {results.overall_score.toFixed(2)} / 5
-                    </span>
-                  </div>
-                  <ul className="space-y-2">
-                    {Object.entries(results.dimensions).map(([dimension, score]) => (
-                      <li
-                        key={dimension}
-                        className="flex justify-between border-b pb-2"
-                      >
-                        <span className="font-medium">{dimension}</span>
-                        <span className="text-indigo-600 font-semibold">
-                          {score.toFixed(2)} / 5
+                  {loadingResult ? (
+                    <div className="text-center py-10">
+                      <Loader className="h-6 w-6 animate-spin text-indigo-600" />
+                      <p className="mt-2">Generating AI evaluation...</p>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="mb-4">
+                        <span className="font-semibold">Overall Score: </span>
+                        <span className="text-indigo-600 font-bold">
+                          {results.overall_score.toFixed(2)} / 5
                         </span>
-                      </li>
-                    ))}
-                  </ul>
+                      </div>
+                      <ul className="space-y-2">
+                        {Object.entries(results.dimensions).map(([dimension, score]) => (
+                          <li
+                            key={dimension}
+                            className="flex justify-between border-b pb-2"
+                          >
+                            <span className="font-medium">{dimension}</span>
+                            <span className="text-indigo-600 font-semibold">
+                              {score.toFixed(2)} / 5
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="prose">
+                        <h3 className="text-lg font-semibold mb-2">AI Evaluation</h3>
+                        <p className="text-base font-semibold underline text-justify pt-4">{results.evaluation}</p>
+                      </div>
+                    </>
+                  )}
                 </>
               ) : questions.length > 0 ? (
                 <ScaleAssessment

@@ -58,7 +58,7 @@ export default function ScaleAssessment({
         <div key={question.id} className="mb-12">
           <div className="bg-neutral-200 rounded-lg p-5 mx-auto max-w-[615px]">
             <div className="flex items-center justify-center">
-              <p className="text-base font-normal">{question.statement}</p>
+              <p className="text-base font-normal text-center">{question.statement}</p>
             </div>
           </div>
 
