@@ -1,14 +1,18 @@
 import NavbarLanding from "@/components/NavbarLanding";
 import Footer from "@/components/FooterLanding";
-import Image from "@/assets/Ambiya.jpg"; 
+import AmbiyaImage from "@/assets/Ambiya.jpg";
+import RivalbyImage from "@/assets/Rivalby.jpeg";
+import EllyazarImage from "@/assets/Ellyazar.jpeg"; 
+import RakaImage from "@/assets/Raka.jpeg";
 
 function About() {
   const team = [
-    { name: "Raka", role: "with Company Culture" },
-    { name: "Rivalby", role: "with Company Culture" },
-    { name: "Ellyazar", role: "with Company Culture" },
-    { name: "Ambiya", role: "with Company Culture" },
+    { name: "Raka", role: "with Company Culture", image: RakaImage },
+    { name: "Rivalby", role: "with Company Culture", image: RivalbyImage },
+    { name: "Ellyazar", role: "with Company Culture", image: EllyazarImage },
+    { name: "Ambiya", role: "with Company Culture", image: AmbiyaImage },
   ];
+  
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -57,9 +61,9 @@ function About() {
             {team.map((person, index) => (
               <div key={index} className="bg-white rounded-lg shadow-md flex items-center p-4 space-x-4">
                 <img
-                  src={Image}
-                  alt={person.name}
-                  className="w-12 h-12 rounded-full object-cover"
+                src={person.image}
+                alt={person.name}
+                className="w-12 h-12 rounded-full object-cover"
                 />
                 <div>
                   <div className="text-black font-medium">{person.name}</div>
