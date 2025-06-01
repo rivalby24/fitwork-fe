@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { ArrowRight, BarChart3, LineChart, MessageSquare } from "lucide-react";
@@ -7,6 +7,7 @@ import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact"
 import Footer from "@/components/FooterLanding";
 import NavbarLanding from "@/components/NavbarLanding";
+import HeroImage from "@/assets/Hero Image.gif"
 
 
 function LandingPage() {
@@ -80,21 +81,13 @@ function LandingPage() {
               values and personality.
             </p>
             <Button className="bg-[#6366F1] hover:bg-[#6366F1] text-white flex items-center">
-              Start <ArrowRight className="ml-2 h-4 w-4" />
+              <Link to={"/login"}>Start </Link>
+              <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
           <div className="relative">
-            <div className="bg-gray-700 rounded-lg aspect-video flex items-center justify-center">
-              <p className="text-gray-300">Hero Image</p>
-            </div>
-            <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-lg shadow-md flex items-center space-x-3">
-              <div className="bg-[#6366F1] rounded-full p-2">
-                <div className="h-8 w-8 rounded-full bg-gray-200"></div>
-              </div>
-              <div>
-                <p className="font-bold text-blue-900">85% Match</p>
-                <p className="text-sm text-gray-500">with Company Culture</p>
-              </div>
+            <div className="rounded-lg aspect-video flex items-center justify-center">
+              <img src={HeroImage} alt="" className="w-600 h-120" />
             </div>
           </div>
         </div>

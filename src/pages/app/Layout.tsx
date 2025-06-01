@@ -83,7 +83,7 @@ function Layout() {
     ) {
       loaderMessage = "...";
     }
-    return <Loading logoSrc="/src/assets/fwok.svg" message={loaderMessage} />;
+    return <Loading logoSize="w-72 h-72" logoSrc="/src/assets/Loading.gif" message={loaderMessage} />;
   }
 
   if (authStatus !== "pending" && !isAuthorized) {
@@ -94,9 +94,7 @@ function Layout() {
     return (
       <div className="w-full bg-neutral-50 min-h-screen flex flex-col">
         <NavbarDashboard />
-        <div className="flex-grow container mx-auto px-4 py-6 md:py-8">
-          <Outlet context={{ userRole }} />
-        </div>
+        <Outlet context={{ userRole }} />
         <FooterDashboard />
       </div>
     );

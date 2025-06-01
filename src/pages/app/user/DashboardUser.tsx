@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import ChatBotBox from "@/components/ChatBotBox";
 import CompanyA from "@/assets/company-a.webp";
 import CompanyB from "@/assets/company-b.webp";
+import StartUser from "@/assets/StartUser.webp";
 import { Link } from "react-router-dom";
 import { useUserStore } from "@/stores/useUserStore";
 
@@ -54,15 +55,15 @@ function DashboardUser() {
           {assessmentCards.map((card) => (
             <Card key={card.id} className="w-[800px] shadow-sm">
               <CardContent className="p-6">
-                <div className="bg-gray-200 h-40 rounded-lg flex items-center justify-center mb-6">
-                  {card.icon}
+                <div className="bg-gray-200 h-80 rounded-lg flex items-center justify-center mb-6">
+                  <img src={StartUser} alt="" className="w-full h-full object-cover"/>
                 </div>
                 <h2 className="text-base font-normal mb-2">{card.title}</h2>
                 <p className="text-base font-normal text-neutral-600 mb-6">
                   {card.description}
                 </p>
                 <Link to="/app/u/assessment">
-                  <Button className="w-full h-10 bg-neutral-600 hover:bg-neutral-700 rounded-lg cursor-pointer">
+                  <Button className="w-full h-10 bg-indigo-700 hover:bg-indigo-800 rounded-lg cursor-pointer">
                     {card.buttonText}
                   </Button>
                 </Link>

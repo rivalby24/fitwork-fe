@@ -13,6 +13,9 @@ import Compare from "./pages/app/user/Compare";
 import { Toaster } from "./components/ui/sonner";
 import NotFound from "./pages/NotFound";
 import { CandidateRoutesWrapper, CompanyAdminRoutesWrapper } from "./components/auth/RoleBasedWrapper";
+import UpdateEVP from "./pages/app/company/UpdateEVP";
+import AssessmentDetail from "./pages/app/company/AssessmentDetail";
+import CandidateView from "./pages/app/company/CandidateView";
 
 function App() {
   return (
@@ -28,8 +31,10 @@ function App() {
           {/* Rute untuk Admin Perusahaan */}
           <Route element={<CompanyAdminRoutesWrapper />}>
             <Route path="c/dashboard" element={<DashboardPerusahaan />}/>
+            <Route path="c/evp" element={<UpdateEVP />}/>
+            <Route path="c/assessment" element={<AssessmentDetail />}/>
+            <Route path="c/candidates" element={<CandidateView />}/>
           </Route>
-
           {/* Rute untuk Kandidat */}
           <Route element={<CandidateRoutesWrapper />}>
             <Route path="u/dashboard" element={<DashboardUser />}/>

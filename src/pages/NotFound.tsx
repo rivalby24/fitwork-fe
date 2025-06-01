@@ -1,17 +1,22 @@
+import { useNavigate } from "react-router-dom";
 import Error from "@/assets/ERROR.gif";
-import { Link } from "react-router-dom";
 
 function NotFound() {
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="flex items-center justify-center flex-col">
         <img src={Error} alt="error" />
       </div>
       <h2 className="text-center text-xl">
-        This page don't belong to us.
-        <span className="underline pl-2">
-          <Link to="/">Back to root</Link>
-        </span>
+        This page doesn't belong to us.
+        <button
+          onClick={() => navigate(-1)}
+          className="underline text-blue-600 pl-2 hover:text-blue-800"
+        >
+          Go back
+        </button>
       </h2>
     </>
   );

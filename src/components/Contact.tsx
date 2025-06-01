@@ -51,8 +51,8 @@ const ContactForm = () => {
       className="py-16 px-4 bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold bg-blue-600 bg-clip-text text-transparent mb-4">
-            Let’s Make It Happen!
+          <h2 className="text-3xl bg-clip-text font-bold bg-black text-transparent mb-4">
+            Let's Make It Happen!
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Have an interesting idea or project you'd like to discuss? I'm here
