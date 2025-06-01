@@ -9,11 +9,27 @@ import { Link } from "react-router-dom";
 import { useUserStore } from "@/stores/useUserStore";
 
 function DashboardUser() {
-  const { username, loading, fetchUser, error } = useUserStore();
+  const { username, fetchStatus, fetchUser, error } = useUserStore();
 
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
+
+  if (fetchStatus === "pending") {
+    return (
+      <div className="h-screen w-full flex justify-center items-center">
+        <h1 className="text-2xl font-bold animate-pulse">Loading...</h1>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="h-screen w-full flex justify-center items-center">
+        <p className="text-red-500">{error}</p>
+      </div>
+    );
+  }
 
   const assessmentCards = [
     {
@@ -30,13 +46,7 @@ function DashboardUser() {
       <main className="pt-20 px-6 w-full">
         {/* Welcome message */}
         <div className="text-center mb-10 max-w-7xl mx-auto">
-          {loading ? (
-            <h1 className="text-3xl font-bold">Loading...</h1>
-          ) : error ? (
-            <p className="text-red-500">{error}</p>
-          ) : (
-            <h1 className="text-3xl font-bold">Welcome back, {username}!</h1>
-          )}
+          <h1 className="text-3xl font-bold">Welcome back, {username}!</h1>
         </div>
 
         {/* Assessment cards */}

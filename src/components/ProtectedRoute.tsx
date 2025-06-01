@@ -1,7 +1,7 @@
-import React, { ReactNode, useEffect } from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { useAuthStore } from "../stores/useAuthStore";
-import { Loader } from "lucide-react";
+// src/components/ProtectedRoute.tsx
+import React, { ReactNode } from "react";
+import { Navigate, useLocation } from "react-router-dom"; // useOutletContext jika perlu
+import { useAuthStore } from "../stores/useAuthStore"; // Masih butuh userRole
 import { toast } from "sonner";
 import { getDashboardPath } from "@/lib/utils";
 
@@ -16,22 +16,14 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requireCompanyAdmin = false,
   requireCandidate = false,
 }) => {
-  const { isAuthorized, userRole, checkAuth } = useAuthStore();
+  // `isAuthorized` diasumsikan true karena Layout sudah melakukan pengecekan.
+  // Kita tetap ambil userRole untuk pengecekan peran.
+  // Anda bisa juga mendapatkan userRole dari context Outlet jika dikirim dari Layout.
+  const { userRole, isAuthorized } = useAuthStore();
   const location = useLocation();
 
-  useEffect(() => {
-    checkAuth();
-  }, [checkAuth]);
-
-  if (isAuthorized === null) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader className="h-6 w-6 animate-spin text-indigo-600" />
-        <span className="ml-2 text-gray-700">Memeriksa akses...</span>
-      </div>
-    );
-  }
-
+  // Pengaman tambahan jika ProtectedRoute digunakan di luar Layout utama
+  // atau jika status otentikasi berubah setelah Layout dimuat.
   if (!isAuthorized) {
     return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }

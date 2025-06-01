@@ -31,11 +31,7 @@ function AssesmentCompany() {
       setError(null);
       setLoading(true);
 
-      const response = await securedApi.get("api/v1/companies/", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await securedApi.get("api/v1/companies/");
 
       if (Array.isArray(response.data)) {
         setCompanies(response.data);
