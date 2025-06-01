@@ -4,8 +4,10 @@ import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { ArrowRight, BarChart3, LineChart, MessageSquare } from "lucide-react";
 import FAQ from "@/components/FAQ";
+import Contact from "@/components/Contact"
 import Footer from "@/components/FooterLanding";
 import NavbarLanding from "@/components/NavbarLanding";
+
 
 function LandingPage() {
   const location = useLocation();
@@ -158,6 +160,10 @@ function LandingPage() {
       {/* FAQ Section - pastikan ID ada di sini */}
       <section id="faq">
         <FAQ />
+      </section>
+      
+      <section id="contact">
+        <Contact />
       </section>
 
       <Footer />
