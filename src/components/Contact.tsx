@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Send } from "lucide-react";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
+import { Button } from "./ui/button";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -40,7 +43,6 @@ const ContactForm = () => {
     const mailtoLink = `mailto:marifatuambiya1604@gmail.com?subject=${emailSubject}&body=${emailBody}`;
 
     window.location.href = mailtoLink;
-
     // Reset form
     setFormData({ name: "", email: "", subject: "", message: "" });
   };
@@ -71,7 +73,7 @@ const ContactForm = () => {
                 className="block text-sm font-medium text-gray-700 mb-2">
                 Full Name
               </label>
-              <input
+              <Input
                 type="text"
                 id="name"
                 name="name"
@@ -90,7 +92,7 @@ const ContactForm = () => {
                 className="block text-sm font-medium text-gray-700 mb-2">
                 Email
               </label>
-              <input
+              <Input
                 type="email"
                 id="email"
                 name="email"
@@ -111,7 +113,7 @@ const ContactForm = () => {
                 className="block text-sm font-medium text-gray-700 mb-2">
                 Subject
               </label>
-              <input
+              <Input
                 type="text"
                 id="subject"
                 name="subject"
@@ -130,7 +132,7 @@ const ContactForm = () => {
                 className="block text-sm font-medium text-gray-700 mb-2">
                 Message
               </label>
-              <textarea
+              <Textarea
                 id="message"
                 name="message"
                 value={formData.message}
@@ -144,12 +146,12 @@ const ContactForm = () => {
 
             {/* Tombol Kirim */}
             <div className="flex flex-col sm:flex-row gap-4 items-center">
-              <button
+              <Button
                 type="submit"
-                className="w-full sm:flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-lg hover:from-blue-700 hover:to-blue-700 transition-all duration-300 font-medium flex items-center justify-center space-x-2 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                className="w-full sm:flex-1 cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-lg hover:from-blue-700 hover:to-blue-700 transition-all duration-300 font-medium flex items-center justify-center space-x-2 transform hover:scale-105 shadow-lg hover:shadow-xl">
                 <Send className="w-5 h-5" />
                 <span>Send Message</span>
-              </button>
+              </Button>
             </div>
           </div>
         </form>

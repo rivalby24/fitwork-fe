@@ -87,7 +87,7 @@ function LandingPage() {
           </div>
           <div className="relative">
             <div className="rounded-lg aspect-video flex items-center justify-center">
-              <img src={HeroImage} alt="" className="w-600 h-120" />
+              <img src={HeroImage} alt="hero" className="w-600 h-120" loading="lazy" fetchPriority="high"/>
             </div>
           </div>
         </div>

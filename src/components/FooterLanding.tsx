@@ -31,18 +31,18 @@ function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-blue-200 hover:text-white">
+                <a href="#contact" className="text-sm text-blue-200 hover:text-white">
                   Contact
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-blue-200 hover:text-white">
-                  Privacy Policy
+                <a href="#feature" className="text-sm text-blue-200 hover:text-white">
+                  Feature
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-blue-200 hover:text-white">
-                  Terms of Service
+                <a href="#faq" className="text-sm text-blue-200 hover:text-white">
+                  FAQ
                 </a>
               </li>
             </ul>
