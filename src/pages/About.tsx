@@ -69,14 +69,14 @@ function About() {
           intelligence and a deep understanding of work culture, FitWork
           automatically generates accurate and relevant culture fit assessments.
           We believe that successful recruitment depends not only on skills, but
-          also on alignment of values ​​and vision. This is what makes us
+          also on alignment of values and vision. This is what makes us
           different. We don’t just help you recruit, but ensure that every
           candidate truly fits and grows with your company culture.
         </p>
       </div>
 
       <div className="bg-gray-200 p-10">
-        <h2 className="text-right text-xl font-semibold mb-8 mr-8">About Us</h2>
+        <h2 className="text-right text-xl font-bold mb-8 mr-8">About Us</h2>
         <div className="grid grid-cols-4 gap-6">
           {team.map((person, index) => (
             <div
@@ -87,6 +87,8 @@ function About() {
                   src={person.image}
                   alt={person.name}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  fetchPriority="high"
                 />
               </div>
               <div className="text-center">
