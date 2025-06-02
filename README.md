@@ -1,54 +1,89 @@
-# React + TypeScript + Vite
+# FitWork
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**FitWork** adalah solusi perangkat lunak berbasis AI yang secara otomatis menghasilkan asesmen kecocokan budaya (culture fit) berdasarkan Employee Value Proposition (EVP) dari sebuah perusahaan. FitWork membantu perusahaan menemukan kandidat yang paling sesuai dengan nilai, misi, dan budaya kerja mereka.
 
-Currently, two official plugins are available:
+## Fitur
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Asesmen culture fit yang dihasilkan oleh AI
+- Disesuaikan dengan EVP masing-masing perusahaan
+- AI ChatBot untuk melayani pertanyaan mengenai konsultasi karir
+- Menyederhanakan pencocokan antara kandidat dan perusahaan
+- Membandingkan Hasil Asesmen dari beberapa perusahaan
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠 Teknologi yang Digunakan
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Frontend
+- **React** dengan **TypeScript**
+- **Tailwind CSS** untuk styling
+- **Zustand** untuk manajemen state
+- **Shadcn** untuk komponen UI
+
+### Backend
+- **Django**, **PostgreSQL**, dan **Gemini**
+
+---
+
+## 🚀 Cara Memulai
+
+### 1. Clone Repositori
+
+#### Frontend
+```bash
+git clone https://github.com/rivalby24/fitwork-fe.git
+cd fitwork-fe
+npm install
+npm run dev
 ```
+#### Backend
+<a href="https://github.com/rakaiskandar/fitwork-be">Untuk Backend cek repositori ini</a> 
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
+### Landing Page
+<img src="/docs/LandingPage.png">
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Contact
+<img src="/docs/Contact.png">
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+### Register
+<img src="/docs/Register.png">
+
+### Login
+<img src="/docs/Login.png">
+
+### Dashboard User
+<img src="/docs/DashboardUser.png">
+
+### Assessment User
+<img src="/docs/AssessmentUser.png">
+
+### AI ChatBot
+<img src="/docs/ChatBot.png">
+
+### Compare Assessment 
+<img src="/docs/CompareAssessment.png">
+
+### Assessment Compare
+<img src="/docs/CompareAssessment.png">
+
+### Dashboard Perusahaan
+<img src="/docs/DashboardCompany.png">
+
+### Assessment Perusahaan
+<img src="/docs/AssessmentCompany.png">
+
+### EVP Profile
+<img src="/docs/UpdateEVP.png">
+
+---
+
+## Credits
+### Dosen Pengampu
+Yuli Sopianti S. Pd, M. Kom
+
+### Kelompok 8
+- Ellyazar Swastiko - 2309749 - UI/UX Designer
+- Ma'rifatu Ambiya  - 2300822 - Frontend Developer
+- Muhammad Rivalby  - 2307068 - Frontend Developer
+- Raka Iskandar     - 2306068 - Backend Developer
