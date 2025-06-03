@@ -8,11 +8,12 @@ interface CustomJwtPayload {
   exp: number;
   is_company_admin?: boolean;
   is_candidate?: boolean;
+  is_fitwork_admin?: boolean;
 }
 
 interface AuthState {
   isAuthorized: boolean | null;
-  userRole: "candidate" | "company_admin" | null;
+  userRole: "candidate" | "company_admin" | "fitwork_admin" | null;
   authStatus: 'idle' | 'pending' | 'success' | 'error'; // Status untuk melacak proses checkAuth
   checkAuth: () => Promise<void>;
   logout: () => void; // Fungsi logout untuk membersihkan state
@@ -22,6 +23,7 @@ const getRole = (decoded: CustomJwtPayload | null): AuthState["userRole"] => {
   if (!decoded) return null;
   if (decoded.is_company_admin) return "company_admin";
   if (decoded.is_candidate) return "candidate";
+  if (decoded.is_fitwork_admin) return "fitwork_admin";
   return null;
 };
 

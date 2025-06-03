@@ -9,21 +9,18 @@ interface ProtectedRouteProps {
   children: ReactNode;
   requireCompanyAdmin?: boolean;
   requireCandidate?: boolean;
+  requireFitworkAdmin?: boolean;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   requireCompanyAdmin = false,
   requireCandidate = false,
+  requireFitworkAdmin = false
 }) => {
-  // `isAuthorized` diasumsikan true karena Layout sudah melakukan pengecekan.
-  // Kita tetap ambil userRole untuk pengecekan peran.
-  // Anda bisa juga mendapatkan userRole dari context Outlet jika dikirim dari Layout.
   const { userRole, isAuthorized } = useAuthStore();
   const location = useLocation();
 
-  // Pengaman tambahan jika ProtectedRoute digunakan di luar Layout utama
-  // atau jika status otentikasi berubah setelah Layout dimuat.
   if (!isAuthorized) {
     return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
@@ -35,6 +32,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   if (requireCompanyAdmin && userRole !== "company_admin") {
     toast.error("Akses ditolak: Halaman ini hanya untuk admin perusahaan.");
+    return <Navigate to={getDashboardPath(userRole)} replace />;
+  }
+
+  if (requireFitworkAdmin && userRole !== "fitwork_admin") {
+    toast.error("Akses ditolak: Halaman ini hanya untuk admin.");
     return <Navigate to={getDashboardPath(userRole)} replace />;
   }
 

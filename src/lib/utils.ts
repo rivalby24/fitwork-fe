@@ -6,8 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // 🔁 Kembalikan user ke dashboard sesuai perannya
-export const getDashboardPath = (userRole: "candidate" | "company_admin" | null) => {
+export const getDashboardPath = (userRole: "candidate" | "company_admin" | "fitwork_admin" | null) => {
   if (userRole === "candidate") return "/app/u/dashboard";
   if (userRole === "company_admin") return "/app/c/dashboard";
+  if (userRole === "fitwork_admin") return "/app/a/dashboard";
   return "/";
 };

@@ -19,7 +19,7 @@ interface AssessmentResultItem {
   evaluation: string;
 }
 
-export default function Body() {
+function AssesmentQuestion() {
   const { companyId } = useParams<{ companyId: string }>();
   const [questions, setQuestions] = useState<QuestionItem[]>([]);
   const [loadingQuestion, setLoadingQuestion] = useState(true);
@@ -150,3 +150,5 @@ export default function Body() {
     </div>
   );
 }
+
+export default AssesmentQuestion;

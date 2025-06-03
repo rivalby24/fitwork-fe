@@ -18,14 +18,6 @@ function Layout() {
 
   // Logging status saat ini untuk debugging
   useEffect(() => {
-    console.log(
-      "AuthStatus:",
-      authStatus,
-      " | Authorized:",
-      isAuthorized,
-      " | UserFetch:",
-      userFetchStatus
-    );
   }, [authStatus, isAuthorized, userFetchStatus]);
 
   // Inisialisasi Auth

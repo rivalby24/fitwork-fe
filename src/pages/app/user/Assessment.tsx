@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -22,11 +22,7 @@ function AssesmentCompany() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchCompanies();
-  }, []);
-
-  const fetchCompanies = async () => {
+  const fetchCompanies = useCallback(async () => {
     try {
       setError(null);
       setLoading(true);
@@ -47,7 +43,11 @@ function AssesmentCompany() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchCompanies();
+  }, [fetchCompanies]);
 
   const filteredCompanies = companies.filter((company) =>
     company.name.toLowerCase().includes(search.toLowerCase())

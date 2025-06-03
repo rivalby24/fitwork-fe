@@ -4,7 +4,7 @@ import { securedApi } from "@/lib/api";
 type UserState = {
   username: string;
   isCompanyAdmin: boolean | null;
-  company_id: string | null;
+  companyId: string | null;
   fetchStatus: 'idle' | 'pending' | 'success' | 'error'; 
   error: string | null; 
   fetchUser: () => Promise<void>;
@@ -13,7 +13,7 @@ type UserState = {
 
 export const useUserStore = create<UserState>((set, get) => ({
   username: "",
-  company_id: null,
+  companyId: null,
   isCompanyAdmin: null,
   fetchStatus: 'idle', // Status awal: belum ada aksi
   error: null, // Error awal null
@@ -43,7 +43,7 @@ export const useUserStore = create<UserState>((set, get) => ({
       const res = await securedApi.get("/api/v1/me/");
       set({
         username: res.data.username,
-        company_id: res.data.company_id,
+        companyId: res.data.company_id,
         isCompanyAdmin: res.data.is_company_admin,
         fetchStatus: 'success',
         error: null,
@@ -51,8 +51,6 @@ export const useUserStore = create<UserState>((set, get) => ({
     } catch (err) { // Tangkap error spesifik jika perlu (mis. AxiosError)
       console.error('Error fetching user data:', err);
       set({
-        // username: "", // Opsional: reset username atau biarkan state sebelumnya
-        // isCompanyAdmin: null, // Opsional: reset atau biarkan state sebelumnya
         fetchStatus: 'error',
         error: 'Failed to fetch user data.',
       });
@@ -60,11 +58,10 @@ export const useUserStore = create<UserState>((set, get) => ({
   },
 
   clearUser: () => {
-    // Fungsi ini harus dipanggil saat user logout (misalnya dari action logout di useAuthStore)
     set({
       username: "",
       isCompanyAdmin: null,
-      company_id: null,
+      companyId: null,
       fetchStatus: 'idle',
       error: null,
     });

@@ -33,18 +33,18 @@ function UpdateEVP() {
     const [cultureKeywords, setCultureKeywords] = useState<string[]>([]);
 
     const [isEditable, setIsEditable] = useState(false);
-    const { fetchUser, company_id } = useUserStore();
+    const { fetchUser, companyId } = useUserStore();
 
     const fetchEVP = async () => {
-        console.log("fetchEVP called. Current company_id:", company_id);
-        if (!company_id) {
+        console.log("fetchEVP called. Current companyId:", companyId);
+        if (!companyId) {
             console.warn("fetchEVP aborted: Company ID is not available.");
             toast.info("Cannot load/reload data: Company ID is not available.");
             setLoading(false);
             return;
         }
 
-        const url = `/api/v1/companies/${company_id}/`;
+        const url = `/api/v1/companies/${companyId}/`;
         console.log("Fetching EVP data from URL:", url);
 
         setLoading(true);
@@ -87,7 +87,7 @@ function UpdateEVP() {
     useEffect(() => {
         const initializeUserAndCompany = async () => {
             try {
-                console.log("Initializing user data to get company_id...");
+                console.log("Initializing user data to get companyId...");
                 await fetchUser();
             } catch (err) {
                 console.error("Error fetching user:", err);
@@ -99,14 +99,14 @@ function UpdateEVP() {
     }, [fetchUser]);
 
     useEffect(() => {
-        if (company_id) {
-            console.log("company_id is available:", company_id, "Fetching EVP data...");
+        if (companyId) {
+            console.log("companyId is available:", companyId, "Fetching EVP data...");
             fetchEVP();
         } else {
-            console.log("company_id is not yet available after user fetch attempt or change.");
+            console.log("companyId is not yet available after user fetch attempt or change.");
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [company_id]);
+    }, [companyId]);
 
     const addToList = (
         value: string,
@@ -135,7 +135,7 @@ function UpdateEVP() {
 
         if (!newEditState) {
             console.log("Edit mode canceled. Refetching EVP data to revert changes.");
-            if (company_id) {
+            if (companyId) {
                 fetchEVP();
             } else {
                 toast.error("Cannot reload data on cancel: Company ID is not available.");
@@ -145,7 +145,7 @@ function UpdateEVP() {
     };
 
     const handleSubmit = async () => {
-        if (!company_id) {
+        if (!companyId) {
             toast.error("Company ID not available. Cannot save changes.");
             return;
         }
@@ -162,7 +162,7 @@ function UpdateEVP() {
             core_values: coreValues,
             culture_keywords: cultureKeywords,
         };
-        const url = `/api/v1/companies/${company_id}/update/`;
+        const url = `/api/v1/companies/${companyId}/update/`;
         console.log("Submitting EVP data to URL:", url, "Payload:", payload);
 
         try {
@@ -204,7 +204,7 @@ function UpdateEVP() {
         );
     }
 
-    if (!company_id && !loading) {
+    if (!companyId && !loading) {
         return (
             <div className="flex flex-col justify-center items-center h-64 text-center p-4">
                 <p className="text-muted-foreground mb-4">

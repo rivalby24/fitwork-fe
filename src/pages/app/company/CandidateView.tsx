@@ -37,7 +37,7 @@ interface CandidateUserData {
 interface AdminAssessmentSessionData {
     id: string; 
     user: CandidateUserData;
-    company_id: string;
+    companyId: string;
     company_name: string;
     overall_score: number | null;
     created_at: string;
@@ -98,9 +98,7 @@ function CandidateView() {
                         } else if (err.response.data && err.response.data.detail) {
                             errorMsg += ` Detail: ${err.response.data.detail}`;
                         } else {
-                            try {
-                                errorMsg += ` Detail: ${JSON.stringify(err.response.data).substring(0, 300)}`;
-                            } catch {}
+                            errorMsg += ` Detail: ${JSON.stringify(err.response.data).substring(0, 300)}`;
                         }
                     } else if (err.request) {
                         errorMsg = "No response from server. Check your network connection.";
@@ -268,87 +266,89 @@ function CandidateView() {
                             </DialogDescription>
                         </DialogHeader>
 
-                        <div className="py-5 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-sm">
-                            <div className="flex items-start">
-                                <Building size={16} className="mr-2.5 mt-0.5 text-gray-500 flex-shrink-0" />
-                                <div>
-                                    <span className="font-medium text-gray-700">Company:</span>
-                                    <p className="text-gray-800">{selectedSessionForModal.company_name}</p>
-                                </div>
-                            </div>
-                            <div className="flex items-start">
-                                <CalendarDays size={16} className="mr-2.5 mt-0.5 text-gray-500 flex-shrink-0" />
-                                <div>
-                                    <span className="font-medium text-gray-700">Assessment Date:</span>
-                                    <p className="text-gray-800">
-                                        {format(new Date(selectedSessionForModal.created_at), 'EEEE, MMMM dd, yyyy, p', { locale: localeEN })}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="flex items-start sm:col-span-2">
-                                <Star size={16} className="mr-2.5 mt-0.5 text-yellow-500 flex-shrink-0" />
-                                <div>
-                                    <span className="font-medium text-gray-700">Average Score:</span>
-                                    <p className={`font-semibold text-base ${selectedSessionForModal.overall_score !== null && selectedSessionForModal.overall_score >= 4 ? 'text-green-600' :
-                                        selectedSessionForModal.overall_score !== null && selectedSessionForModal.overall_score >= 2.5 ? 'text-yellow-600' :
-                                            selectedSessionForModal.overall_score !== null ? 'text-red-600' : 'text-gray-500'
-                                        }`}>
-                                        {selectedSessionForModal.overall_score !== null
-                                            ? `${selectedSessionForModal.overall_score.toFixed(1)} / 5.0`
-                                            : "No score available"}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="sm:col-span-2 mt-3 pt-4 border-t border-gray-200">
-                                <h3 className="text-md font-semibold text-gray-800 mb-2">Additional Details:</h3>
-                                {isLoadingModalDetails ? (
-                                    <div className="text-center py-4 flex items-center justify-center text-gray-500">
-                                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                        </svg>
-                                        Loading further details...
-                                    </div>
-                                ) : sessionFullDetails && sessionFullDetails.answers ? ( 
+                        <div className="overflow-y-auto max-h-[65vh] md:max-h-[65vh] pr-3">
+                            <div className="py-5 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-sm">
+                                <div className="flex items-start">
+                                    <Building size={16} className="mr-2.5 mt-0.5 text-gray-500 flex-shrink-0" />
                                     <div>
-                                        {sessionFullDetails.dimension_scores && Object.keys(sessionFullDetails.dimension_scores).length > 0 && (
-                                            <>
-                                                <h4 className="font-semibold mt-2 mb-1 text-gray-700">Scores per Dimension:</h4>
-                                                <ul className="list-disc list-inside pl-1 space-y-0.5">
-                                                    {Object.entries(sessionFullDetails.dimension_scores).map(([dim, score]) => (
-                                                        <li key={dim} className="text-gray-600">{dim}: {typeof score === 'number' ? score.toFixed(1) : 'N/A'}</li>
-                                                    ))}
-                                                </ul>
-                                            </>
-                                        )}
-                                        {sessionFullDetails.answers && sessionFullDetails.answers.length > 0 && (
-                                            <>
-                                                <h4 className="font-semibold mt-3 mb-1 text-gray-700">Question Answers:</h4>
-                                                <div className="max-h-60 overflow-y-auto pr-2 space-y-2">
-                                                    {sessionFullDetails.answers.map((ans, index) => (
-                                                        <div key={ans.question_id || index} className="p-2 border rounded-md bg-gray-50 text-xs">
-                                                            <p className="font-medium text-gray-700">Q: <span className="font-normal">{ans.question_statement}</span></p>
-                                                            <p className="text-gray-600">Dimension: {ans.dimension}</p>
-                                                            <p className="text-indigo-700 font-semibold">Score: {ans.score}</p>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </>
-                                        )}
-                                        {(!sessionFullDetails.dimension_scores || Object.keys(sessionFullDetails.dimension_scores).length === 0) &&
-                                         (!sessionFullDetails.answers || sessionFullDetails.answers.length === 0) && (
-                                            <p className="text-slate-500 italic text-xs">No detailed scores per dimension or answers available for this session.</p>
-                                         )}
+                                        <span className="font-medium text-gray-700">Company:</span>
+                                        <p className="text-gray-800">{selectedSessionForModal.company_name}</p>
                                     </div>
-                                ) : (
-                                    <div className="p-4 bg-slate-50 rounded-md text-center">
-                                        <p className="text-slate-600 italic text-xs">
-                                            The feature to display detailed scores per dimension or question answers will be available if data is received from the server.
-                                            Ensure the endpoint `/api/v1/assessments/session-details/&lt;session_id&gt;/` is correctly implemented in the backend.
+                                </div>
+                                <div className="flex items-start">
+                                    <CalendarDays size={16} className="mr-2.5 mt-0.5 text-gray-500 flex-shrink-0" />
+                                    <div>
+                                        <span className="font-medium text-gray-700">Assessment Date:</span>
+                                        <p className="text-gray-800">
+                                            {format(new Date(selectedSessionForModal.created_at), 'EEEE, MMMM dd, yyyy, p', { locale: localeEN })}
                                         </p>
                                     </div>
-                                )}
+                                </div>
+                                <div className="flex items-start sm:col-span-2">
+                                    <Star size={16} className="mr-2.5 mt-0.5 text-yellow-500 flex-shrink-0" />
+                                    <div>
+                                        <span className="font-medium text-gray-700">Average Score:</span>
+                                        <p className={`font-semibold text-base ${selectedSessionForModal.overall_score !== null && selectedSessionForModal.overall_score >= 4 ? 'text-green-600' :
+                                            selectedSessionForModal.overall_score !== null && selectedSessionForModal.overall_score >= 2.5 ? 'text-yellow-600' :
+                                                selectedSessionForModal.overall_score !== null ? 'text-red-600' : 'text-gray-500'
+                                            }`}>
+                                            {selectedSessionForModal.overall_score !== null
+                                                ? `${selectedSessionForModal.overall_score.toFixed(1)} / 5.0`
+                                                : "No score available"}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="sm:col-span-2 mt-3 pt-4 border-t border-gray-200">
+                                    <h3 className="text-md font-semibold text-gray-800 mb-2">Additional Details:</h3>
+                                    {isLoadingModalDetails ? (
+                                        <div className="text-center py-4 flex items-center justify-center text-gray-500">
+                                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            Loading further details...
+                                        </div>
+                                    ) : sessionFullDetails && sessionFullDetails.answers ? ( 
+                                        <div>
+                                            {sessionFullDetails.dimension_scores && Object.keys(sessionFullDetails.dimension_scores).length > 0 && (
+                                                <>
+                                                    <h4 className="font-semibold mt-2 mb-1 text-gray-700">Scores per Dimension:</h4>
+                                                    <ul className="list-disc list-inside pl-1 space-y-0.5">
+                                                        {Object.entries(sessionFullDetails.dimension_scores).map(([dim, score]) => (
+                                                            <li key={dim} className="text-gray-600">{dim}: {typeof score === 'number' ? score.toFixed(1) : 'N/A'}</li>
+                                                        ))}
+                                                    </ul>
+                                                </>
+                                            )}
+                                            {sessionFullDetails.answers && sessionFullDetails.answers.length > 0 && (
+                                                <>
+                                                    <h4 className="font-semibold mt-3 mb-1 text-gray-700">Question Answers:</h4>
+                                                    <div className="max-h-60 overflow-y-auto pr-2 space-y-2">
+                                                        {sessionFullDetails.answers.map((ans, index) => (
+                                                            <div key={ans.question_id || index} className="p-2 border rounded-md bg-gray-50 text-xs">
+                                                                <p className="font-medium text-gray-700">Q: <span className="font-normal">{ans.question_statement}</span></p>
+                                                                <p className="text-gray-600">Dimension: {ans.dimension}</p>
+                                                                <p className="text-indigo-700 font-semibold">Score: {ans.score}</p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </>
+                                            )}
+                                            {(!sessionFullDetails.dimension_scores || Object.keys(sessionFullDetails.dimension_scores).length === 0) &&
+                                            (!sessionFullDetails.answers || sessionFullDetails.answers.length === 0) && (
+                                                <p className="text-slate-500 italic text-xs">No detailed scores per dimension or answers available for this session.</p>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <div className="p-4 bg-slate-50 rounded-md text-center">
+                                            <p className="text-slate-600 italic text-xs">
+                                                The feature to display detailed scores per dimension or question answers will be available if data is received from the server.
+                                                Ensure the endpoint `/api/v1/assessments/session-details/&lt;session_id&gt;/` is correctly implemented in the backend.
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
 

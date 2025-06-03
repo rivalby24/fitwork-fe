@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import StatCard from "@/components/StatCard"; // Pastikan path ini benar
-import { Button } from "@/components/ui/button"; // Pastikan path ini benar
-import { Skeleton } from "@/components/ui/skeleton"; // Pastikan path ini benar
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"; // Pastikan path ini benar
+import StatCard from "@/components/StatCard";
+import { Button } from "@/components/ui/button"; 
+import { Skeleton } from "@/components/ui/skeleton"; 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"; 
 import { CheckSquare, Users, BarChart2, AlertCircle } from "lucide-react";
-import { securedApi } from '@/lib/api'; // Pastikan path ini benar dan securedApi tersetup
+import { securedApi } from '@/lib/api'; 
 import { AxiosError } from 'axios';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
-import { useUserStore } from "@/stores/useUserStore"; // Pastikan path ini benar
+import { useUserStore } from "@/stores/useUserStore";
 
 // Interface untuk data pertanyaan dari API
 interface QuestionWithAverageScore {
@@ -40,7 +40,7 @@ const DIMENSION_COLORS = [
 
 function DashboardPerusahaan() {
   const navigate = useNavigate();
-  const { company_id } = useUserStore(); // Mengambil company_id dari Zustand store
+  const { companyId } = useUserStore(); // Mengambil company_id dari Zustand store
   
   const [overviewData, setOverviewData] = useState<CompanyOverviewData | null>(null);
   const [chartData, setChartData] = useState<ChartData[]>([]);
@@ -48,7 +48,7 @@ function DashboardPerusahaan() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!company_id) {
+    if (!companyId) {
       setError("Company ID tidak tersedia dari user store. Pastikan Anda telah login sebagai perusahaan.");
       setIsLoading(false);
       return;
@@ -59,7 +59,7 @@ function DashboardPerusahaan() {
       setError(null);
       try {
         const response = await securedApi.get<CompanyOverviewData>(
-          `/api/v1/assessments/overview/${company_id}/`
+          `/api/v1/assessments/overview/${companyId}/`
         );
         setOverviewData(response.data);
 
@@ -126,7 +126,7 @@ function DashboardPerusahaan() {
     };
 
     fetchOverviewData();
-  }, [company_id]);
+  }, [companyId]);
 
   if (isLoading) {
     return (

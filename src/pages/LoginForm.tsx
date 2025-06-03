@@ -28,8 +28,10 @@ const LoginForm: React.FC = () => {
       const decoded: DecodedToken = jwtDecode(token);
       if (decoded.is_company_admin) {
         navigate("/app/c/dashboard", { replace: true });
-      } else {
+      } else if (decoded.is_candidate) {
         navigate("/app/u/dashboard", { replace: true });
+      } else if (decoded.is_fitwork_admin) {
+        navigate("/app/a/dashboard", { replace: true });
       }
     }
   }, [navigate]);
@@ -54,8 +56,10 @@ const LoginForm: React.FC = () => {
 
       if (decoded.is_company_admin) {
         navigate("/app/c/dashboard");
-      } else {
+      } else if (decoded.is_candidate){
         navigate("/app/u/dashboard");
+      } else if (decoded.is_fitwork_admin) {
+        navigate("/app/a/dashboard");
       }
     } catch (error) {
       toast.error("Login failed. Please check your credentials."); // ✅ Error toast

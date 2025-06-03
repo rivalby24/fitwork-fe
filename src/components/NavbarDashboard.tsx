@@ -7,13 +7,12 @@ import { useAuthStore } from "@/stores/useAuthStore"; // Impor useAuthStore untu
 const NavbarDashboard = () => {
   const {
     username,
-    isCompanyAdmin,
     fetchStatus,
     fetchUser,
     clearUser, 
   } = useUserStore();
 
-  const { logout: authLogout } = useAuthStore();
+  const { logout: authLogout, userRole } = useAuthStore();
 
   const navigate = useNavigate();
 
@@ -38,22 +37,38 @@ const NavbarDashboard = () => {
   if (fetchStatus !== 'success') {
      return null; // Atau tampilkan UI minimal/pesan error jika fetchStatus === 'error'
   }
-
-  const dashboardLink = isCompanyAdmin ? "/app/c/dashboard" : "/app/u/dashboard";
+  
+  let dashboardLink;
+  let navItems;
   const navLinkClass = "font-normal text-white text-base px-2 py-1 hover:opacity-80";
 
-  const navItems = isCompanyAdmin
-    ? [
-        { label: "Home", href: "/app/c/dashboard" },
-        { label: "Assessment", href: "/app/c/assessment" }, // Perbaiki jika perlu
-        { label: "EVP", href: "/app/c/evp" }, // Perbaiki jika perlu
-      ]
-    : [
-        { name: "Home", path: "/app/u/dashboard" },
-        { name: "Assessment", path: "/app/u/assessment" },
-        { name: "AI Chat", path: "/app/u/ai-chat" },
-        { name: "Compare", path: "/app/u/compare" },
-      ];
+  if (userRole === "candidate") {
+    dashboardLink = "/app/u/dashboard";
+    navItems = [
+      { name: "Home", path: "/app/u/dashboard" },
+      { name: "Assessment", path: "/app/u/assessment" },
+      { name: "AI Chat", path: "/app/u/ai-chat" },
+      { name: "Compare", path: "/app/u/compare" },
+    ];
+  } else if (userRole === "company_admin") {
+    dashboardLink = "/app/c/dashboard";
+    navItems = [
+      { label: "Home", href: "/app/c/dashboard" },
+      { label: "Assessment", href: "/app/c/assessment" },
+      { label: "EVP", href: "/app/c/evp" },
+    ];
+  } else if (userRole === "fitwork_admin") {
+    dashboardLink = "/app/a/dashboard";
+    navItems = [
+      { label: "Home", href: "/app/a/dashboard" },
+      { label: "Companies", href: "/app/a/companies" },
+      { label: "Users", href: "/app/a/users" },
+    ];
+  } else {
+    console.warn("NavbarDashboard: Unknown or undefined userRole:", userRole);
+    dashboardLink = "/login"; // Or a generic home page
+    navItems = [{ label: "Home", href: "/" }]; // Provide a default or empty array
+  }
 
   const handleLogout = () => {
     authLogout(); 
@@ -63,7 +78,6 @@ const NavbarDashboard = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full h-[65px] bg-indigo-500 border-b border-indigo-200">
-      {/* ... sisa JSX Anda ... */}
       <div className="container mx-auto h-full px-4 flex items-center justify-between">
         <div className="flex gap-8 items-center">
           <Link to={dashboardLink} className="flex items-center">

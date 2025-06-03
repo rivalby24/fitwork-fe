@@ -13,3 +13,9 @@ export const CompanyAdminRoutesWrapper: React.FC = () => (
     <Outlet /> {/* Akan merender rute anak untuk admin perusahaan */}
   </ProtectedRoute>
 );
+
+export const FitworkAdminRoutesWrapper: React.FC = () => (
+  <ProtectedRoute requireFitworkAdmin={true}>
+    <Outlet /> {/* Akan merender rute anak untuk admin perusahaan */}
+  </ProtectedRoute>
+);

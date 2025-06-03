@@ -12,10 +12,13 @@ import AssesmentQuestion from "./pages/app/user/AssessmentQuestion";
 import Compare from "./pages/app/user/Compare";
 import { Toaster } from "./components/ui/sonner";
 import NotFound from "./pages/NotFound";
-import { CandidateRoutesWrapper, CompanyAdminRoutesWrapper } from "./components/auth/RoleBasedWrapper";
+import { CandidateRoutesWrapper, CompanyAdminRoutesWrapper, FitworkAdminRoutesWrapper } from "./components/auth/RoleBasedWrapper";
 import UpdateEVP from "./pages/app/company/UpdateEVP";
 import AssessmentDetail from "./pages/app/company/AssessmentDetail";
 import CandidateView from "./pages/app/company/CandidateView";
+import DashboardAdmin from "./pages/app/admin/DashboardAdmin";
+import UserView from "./pages/app/admin/UserView";
+import CompanyView from "./pages/app/admin/CompanyView";
 
 function App() {
   return (
@@ -28,6 +31,12 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="*" element={<NotFound />}/>
         <Route path="app" element={<Layout />}>
+          {/* Rute untuk Admin */}
+          <Route element={<FitworkAdminRoutesWrapper />}>
+            <Route path="a/dashboard" element={<DashboardAdmin />}/>
+            <Route path="a/users" element={<UserView />}/>
+            <Route path="a/companies" element={<CompanyView />}/>
+          </Route>
           {/* Rute untuk Admin Perusahaan */}
           <Route element={<CompanyAdminRoutesWrapper />}>
             <Route path="c/dashboard" element={<DashboardPerusahaan />}/>
@@ -45,7 +54,6 @@ function App() {
             />
             <Route path="u/ai-chat" element={<ChatBot />} />
             <Route path="u/compare" element={<Compare />} />
-            {/* Tambah rute kandidat lain di sini */}
           </Route>
         </Route>
       </Routes>
